@@ -1,188 +1,319 @@
 <template>
-  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-
-  <div class="min-h-screen w-screen bg-[#e9ebee] flex items-center justify-center p-4 font-['Montserrat']">
-    <div class="relative bg-white w-full max-w-[850px] flex rounded-[30px] shadow-2xl overflow-hidden min-h-[500px]">
-
-      
-      <div class="w-[40%] bg-gradient-to-b from-[#8d2f2f] to-[#5a1a1a] p-10 flex flex-col items-center justify-center text-center text-white z-10">
-        <h2 class="font-['Permanent+Marker'] text-2xl italic tracking-wider mb-6">
-          {{ isSignup ? 'WELCOME BACK!' : 'HELLO FRIEND!' }}
-        </h2>
-        <p class="text-[13px] leading-relaxed mb-8 font-light px-4">
-          {{ isSignup 
-            ? 'Already have an account? Click below to sign in.' 
-            : 'Don’t have an account? Click below to sign up.' }}
-        </p>
-        <button 
-          @click="toggleMode"
-          class="border-2 border-white bg-[#5a1a1a] rounded-full px-12 py-2 text-xs font-bold tracking-widest hover:bg-white hover:text-[#5a1a1a] transition-all"
-        >
-          {{ isSignup ? 'SIGN IN' : 'SIGN UP' }}
-        </button>
-      </div>
-
-      
-      <div class="w-[60%] p-12 flex flex-col items-center justify-center relative">
-        <h1 class="text-[#5a1a1a] text-3xl font-bold mb-6">
-          {{ isSignup ? 'Create Account' : 'Sign In' }}
-        </h1>
-
+  <div class="min-h-screen w-full bg-white flex font-sans">
+    <!-- Left Panel - SVG Image -->
+    <div class="w-2/5 flex items-center justify-center p-8 lg:p-12">
+      <div class="w-full max-w-lg">
+        <img 
+          src="../assets/undraw_personal-finance_xpqg.svg" 
+          alt="Personal Finance Illustration"
+          class="w-full h-auto max-h-[500px] object-contain"
+        />
         
-        <div v-if="isSignup" class="flex gap-3 mb-4">
-          <div class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-gray-500 hover:bg-red-900 cursor-pointer transition-colors">
-            <i class="fab fa-facebook-f text-sm"></i>
-          </div>
-          <div class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-gray-500 hover:bg-red-900 cursor-pointer transition-colors">
-            <i class="fab fa-twitter text-sm"></i>
-          </div>
-          <div class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-gray-500 hover:bg-red-900 cursor-pointer transition-colors">
-            <i class="fab fa-linkedin-in text-sm"></i>
-          </div>
+        <!-- Sign In button below the image -->
+        <div class="mt-8 text-center">
+          <p class="text-gray-600 text-lg mb-4">Already have an account?</p>
+          <button 
+            @click="$router.push('/login')"
+            class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300"
+          >
+            SIGN IN
+          </button>
         </div>
-
-        <p class="text-[11px] text-gray-400 mb-6 italic" v-if="isSignup">or use your email account</p>
-
-      
-        <div class="w-full max-w-[320px] space-y-4">
-     
-          <div v-if="isSignup" class="relative">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <i class="fas fa-user text-sm"></i>
-            </span>
-            <input 
-              v-model="form.username"
-              type="text" 
-              placeholder="Username" 
-              class="w-full border border-gray-900 rounded-md py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-gray-500 bg-[#f4f8fb]"
-            />
-            <p v-if="errors.username" class="text-[10px] text-red-900 mt-1 absolute">{{ errors.username }}</p>
-          </div>
-
-         
-          <div class="relative pt-1">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 mt-0.5">
-              <i class="fas fa-envelope text-sm"></i>
-            </span>
-            <input 
-              v-model="form.email"
-              type="email" 
-              placeholder="Email" 
-              class="w-full border border-gray-900 rounded-md py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-gray-500 bg-[#f4f8fb]"
-            />
-            <p v-if="errors.email" class="text-[10px] text-red-900 mt-1 absolute">{{ errors.email }}</p>
-          </div>
-
-         
-          <div class="relative pt-1">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 mt-0.5">
-              <i class="fas fa-lock text-sm"></i>
-            </span>
-            <input 
-              v-model="form.password"
-              type="password" 
-              placeholder="Password" 
-              class="w-full border border-gray-900 rounded-md py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-gray-500 bg-[#f4f8fb]"
-            />
-            <p v-if="errors.password" class="text-[10px] text-red-900 mt-1 absolute">{{ errors.password }}</p>
-          </div>
-        </div>
-
-     
-        <button 
-          @click="isSignup ? signup() : signin()"
-          class="mt-12 bg-gradient-to-r from-[#882e2e] to-[#5a1a1a] text-white px-14 py-2.5 rounded-full text-xs font-bold tracking-widest shadow-xl hover:scale-105 transition-transform"
-        >
-          {{ isSignup ? 'SIGN UP' : 'SIGN IN' }}
-        </button>
       </div>
+    </div>
 
+    <!-- Right Panel - Registration Form -->
+    <div class="w-3/5 bg-white flex items-center justify-center p-4 lg:p-3">
+      <div class="max-w-md w-full">
+        <!-- Success Message -->
+        <div v-if="successMessage" class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700">
+          <div class="flex items-center gap-3">
+            <i class="fas fa-check-circle text-green-500"></i>
+            <span>{{ successMessage }}</span>
+          </div>
+        </div>
+
+        <!-- General Error Message -->
+        <div v-if="generalError" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+          <div class="flex items-center gap-3">
+            <i class="fas fa-exclamation-circle text-red-500"></i>
+            <span>{{ generalError }}</span>
+          </div>
+        </div>
+
+        <h2 class="text-3xl lg:text-4xl font-bold text-[#5a1a1a] mb-2">Create Account</h2>
+        <p class="text-gray-500 mb-8">Fill in your details to get started</p>
+
+        <!-- Form -->
+        <form @submit.prevent="handleSignup" class="space-y-6">
+          <!-- First Name -->
+          <div class="relative">
+            <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input 
+              v-model="form.firstname" 
+              placeholder="First Name" 
+              class="input-field pl-10"
+              :class="{ 'border-red-500': fieldErrors.firstname }"
+              :disabled="isLoading"
+              required 
+            />
+            <p v-if="fieldErrors.firstname" class="text-red-500 text-xs mt-1 pl-1">{{ fieldErrors.firstname }}</p>
+          </div>
+
+          <!-- Last Name -->
+          <div class="relative">
+            <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input 
+              v-model="form.lastname" 
+              placeholder="Last Name" 
+              class="input-field pl-10"
+              :class="{ 'border-red-500': fieldErrors.lastname }"
+              :disabled="isLoading"
+              required 
+            />
+            <p v-if="fieldErrors.lastname" class="text-red-500 text-xs mt-1 pl-1">{{ fieldErrors.lastname }}</p>
+          </div>
+          
+          <!-- Email -->
+          <div class="relative">
+            <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input 
+              v-model="form.email" 
+              type="email" 
+              placeholder="Email Address" 
+              class="input-field pl-10"
+              :class="{ 'border-red-500': fieldErrors.email }"
+              :disabled="isLoading"
+              required 
+            />
+            <p v-if="fieldErrors.email" class="text-red-500 text-xs mt-1 pl-1">{{ fieldErrors.email }}</p>
+          </div>
+          
+          <!-- Password -->
+          <div>
+            <div class="relative">
+              <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              <input 
+                v-model="form.password" 
+                type="password" 
+                placeholder="Password" 
+                class="input-field pl-10 pr-10"
+                :class="{ 'border-red-500': fieldErrors.password }"
+                :disabled="isLoading"
+                required 
+                @keyup.enter="handleSignup"
+              />
+              <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-eye text-sm"></i>
+              </button>
+            </div>
+            <p v-if="fieldErrors.password" class="text-red-500 text-xs mt-1 pl-1">{{ fieldErrors.password }}</p>
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <div class="relative">
+              <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              <input 
+                v-model="form.confirmedPassword" 
+                type="password" 
+                placeholder="Confirm Password" 
+                class="input-field pl-10 pr-10"
+                :class="{ 'border-red-500': fieldErrors.confirmedPassword }"
+                :disabled="isLoading"
+                required 
+              />
+              <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-eye text-sm"></i>
+              </button>
+            </div>
+            <p v-if="fieldErrors.confirmedPassword" class="text-red-500 text-xs mt-1 pl-1">{{ fieldErrors.confirmedPassword }}</p>
+          </div>
+          
+          <!-- Terms Agreement -->
+          <div class="flex items-start">
+            <input 
+              type="checkbox" 
+              v-model="form.agreeToTerms" 
+              id="terms" 
+              class="mr-2 w-4 h-4 text-[#5a1a1a] rounded focus:ring-[#5a1a1a]"
+              :disabled="isLoading"
+              required 
+            />
+            <label for="terms" class="text-gray-600 text-sm">
+              I agree to the <a href="#" class="text-[#5a1a1a] hover:text-[#741919]">Terms and Conditions</a>
+            </label>
+          </div>
+          <p v-if="fieldErrors.agreeToTerms" class="text-red-500 text-xs mt-1 pl-1">{{ fieldErrors.agreeToTerms }}</p>
+
+          <!-- Register Button -->
+          <button 
+            type="submit" 
+            :disabled="isLoading"
+            class="w-full bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span v-if="isLoading">
+              <i class="fas fa-spinner fa-spin mr-2"></i> Creating Account...
+            </span>
+            <span v-else>Create Account</span>
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref, nextTick } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const isSignup = ref(true)  
+const isLoading = ref(false)
+const generalError = ref('')
+const successMessage = ref('')
 
+// Form data
 const form = reactive({
-  username: '',
+  firstname: '',
+  lastname: '',
   email: '',
-  password: ''
+  password: '',
+  confirmedPassword: '',
+  agreeToTerms: false,
 })
 
-const errors = reactive({
-  username: '',
+// Field-specific errors
+const fieldErrors = reactive({
+  firstname: '',
+  lastname: '',
   email: '',
-  password: ''
+  password: '',
+  confirmedPassword: '',
+  agreeToTerms: ''
 })
 
-const toggleMode = () => {
-  isSignup.value = !isSignup.value
-  form.username = ''
-  form.email = ''
-  form.password = ''
-  errors.username = ''
-  errors.email = ''
-  errors.password = ''
-}
-
-// Validation
-const validate = () => {
-  let valid = true
-  if (isSignup.value && !form.username) errors.username = 'Username is required'
-  else errors.username = ''
-
-  errors.email = !/^\S+@\S+\.\S+$/.test(form.email) ? 'Invalid email address' : ''
-  errors.password = form.password.length < 6 ? 'Password too short' : ''
-
-  if ((isSignup.value && errors.username) || errors.email || errors.password) valid = false
-  return valid
-}
-
-// Signup
-const signup = () => {
-  if (!validate()) return
-  const users = JSON.parse(localStorage.getItem('users') || '[]')
-  users.push({ 
-    username: form.username, 
-    email: form.email, 
-    password: form.password, 
-    completedOnboarding: false 
+// Clear all errors
+const clearErrors = () => {
+  generalError.value = ''
+  Object.keys(fieldErrors).forEach(key => {
+    fieldErrors[key] = ''
   })
-  localStorage.setItem('users', JSON.stringify(users))
-  alert('Sign Up successful! Please Sign In.')
-  toggleMode()
 }
 
-// Signin
-const signin = () => {
-  const users = JSON.parse(localStorage.getItem('users') || '[]')
-  const user = users.find(u => u.email === form.email && u.password === form.password)
+const handleSignup = async () => {
+  // Clear previous errors
+  clearErrors()
+  successMessage.value = ''
+
+  isLoading.value = true
   
-  if (user) {
+  try {
+    const response = await fetch('http://localhost/React/AI-Invest-Backend/backend(php)/code/auth/register.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstname: form.firstname,
+        lastname: form.lastname,
+        email: form.email,
+        password: form.password,
+        confimedPassword: form.confirmedPassword,
+        agreeToTerms: form.agreeToTerms
+      })
+    })
     
-    localStorage.setItem('loggedInUser', JSON.stringify(user))
-
-    alert('Login successful!')
-
-   
-    router.push('/onboarding/step1')
-  } else {
-    alert('Invalid email or password')
+    const data = await response.json()
+    console.log('Backend response:', data)
+    
+    if (response.ok && data.success) {
+      successMessage.value = data.message || 'Registration successful!'
+      
+      // Clear form
+      form.firstname = ''
+      form.lastname = ''
+      form.email = ''
+      form.password = ''
+      form.confirmedPassword = ''
+      form.agreeToTerms = false
+      
+      setTimeout(() => {
+        router.push('/login')
+      }, 2000)
+      
+    } else {
+      // Check if backend returned field-specific errors
+      if (data.errors) {
+        // Set field-specific errors
+        Object.keys(data.errors).forEach(key => {
+          if (fieldErrors.hasOwnProperty(key)) {
+            fieldErrors[key] = data.errors[key]
+          }
+        })
+        
+        // If there's a general error, show it too
+        if (data.message && !data.errors.general) {
+          generalError.value = data.message
+        }
+        
+        // If backend returned a general error in errors object
+        if (data.errors.general) {
+          generalError.value = data.errors.general
+        }
+      } else {
+        // Fallback to general error message
+        generalError.value = data.message || 'Registration failed. Please try again.'
+      }
+    }
+    
+  } catch (error) {
+    console.error('Signup error:', error)
+    generalError.value = 'Network error. Please check your connection and try again.'
+  } finally {
+    isLoading.value = false
   }
 }
-
 </script>
 
 <style>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
-body {
+body, html {
   margin: 0;
-  -webkit-font-smoothing: antialiased;
+  padding: 0;
+  width: 100%;
+  background-color: white;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background: white;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #5a1a1a;
+  box-shadow: 0 0 0 3px rgba(90, 26, 26, 0.2);
+}
+
+.input-field.border-red-500 {
+  border-color: #ef4444;
+}
+
+.input-field.border-red-500:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.input-field:disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
 }
 </style>
