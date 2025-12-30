@@ -50,7 +50,7 @@ vue
 </template>
 
 <script setup>
-import { onboardingStore } from '../../store/onboardingStore.js';
+import { onboardingStore } from '../../store/onboardingstore.js';
 const levels = [
   { id: 'beginner', title: 'Beginner', desc: "I'm new to investing." },
   { id: 'intermediate', title: 'Intermediate', desc: 'I have some experience.' },
