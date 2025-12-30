@@ -16,54 +16,64 @@ $filedPassword = $data['password'] ?? null;
 $filedEmail = $data['email'] ?? null;
 $agreeToTerms = $data['agreeToTerms'] ?? null;
 
-$messages = [];
+$errors = [];
 
-if (!$firstname || !$lastname || !$filedPassword || !$filedEmail) {
+// Field-specific validation
+if (!$firstname) {
+    $errors['firstname'] = "First name is required.";
+}
+
+if (!$lastname) {
+    $errors['lastname'] = "Last name is required.";
+}
+
+if (!$filedEmail) {
+    $errors['email'] = "Email is required.";
+} elseif (!filter_var($filedEmail, FILTER_VALIDATE_EMAIL)) {
+    $errors['email'] = "Invalid email format.";
+}
+
+if (!$filedPassword) {
+    $errors['password'] = "Password is required.";
+} elseif (strlen($filedPassword) < 6) {
+    $errors['password'] = "Password must be more than 6 characters.";
+}
+
+if (!$confimedPassword) {
+    $errors['confirmedPassword'] = "Please confirm your password.";
+} elseif ($confimedPassword !== $filedPassword) {
+    $errors['confirmedPassword'] = "Passwords must match.";
+}
+
+if (!$agreeToTerms) {
+    $errors['agreeToTerms'] = "You must agree to the Terms and Conditions.";
+}
+
+if (!empty($errors)) {
     echo json_encode([
         "success" => false,
-        "message" => "All fields are required."
+        "errors" => $errors,
+        "message" => "Please fix the errors below."
     ]);
     exit();
 }
 
-if ($confimedPassword !== $filedPassword) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Passwords must match."
-    ]);
-    exit();
-}
-    else if (strlen($filedPassword) < 6) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Password must be more than 6 characters."
-    ]);
-    exit();
-
-}
-else if (!filter_var($filedEmail, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Invalid email format."
-    ]);
-    exit();
-}
-
-$hashedPassword = password_hash($filedPassword, PASSWORD_BCRYPT);
-
-$sql = "SELECT * FROM users WHERE username = ?";
+$sql = "SELECT * FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $filedUsername);
+$stmt->bind_param("s", $filedEmail);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     echo json_encode([
         "success" => false,
-        "message" => "Username already exists."
+        "errors" => ["email" => "Email already exists."],
+        "message" => "Email already exists."
     ]);
     exit();
 }
+
+$hashedPassword = password_hash($filedPassword, PASSWORD_BCRYPT);
 
 $sql = "INSERT INTO users (firstname, lastname, password, email, accepted_terms)
         VALUES (?, ?, ?, ?, ?)";
@@ -78,6 +88,7 @@ if ($stmt->execute()) {
 } else {
     echo json_encode([
         "success" => false,
+        "errors" => ["general" => "Registration failed. Please try again."],
         "message" => "Registration failed."
     ]);
 }
