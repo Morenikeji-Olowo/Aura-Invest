@@ -24,9 +24,14 @@
         <div class="flex items-center gap-3 text-gray-400 font-semibold text-sm cursor-pointer hover:text-gray-600">
           <i class="fas fa-cog"></i> Settings
         </div>
-        <div @click="$router.push('/')" class="flex items-center gap-3 text-gray-400 font-semibold text-sm cursor-pointer hover:text-red-600">
-          <i class="fas fa-sign-out-alt"></i> Log out
-        </div>
+
+        <button 
+        @click="logout"
+        :disabled="isSaving"
+        class="flex items-center gap-3 text-gray-400 font-semibold text-sm cursor-pointer"
+      >
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
       </div>
     </aside>
 
@@ -138,4 +143,24 @@ const insights = [
   { title: 'Market Opportunity', desc: 'The tech sector shows strong growth potential. Consider rebalancing.' },
   { title: 'Goal Progress', desc: 'You are 95% on track for your "House Down Payment" goal.' }
 ]
+
+const logout = async () => {  
+  
+  try {
+    const response = await fetch('http://localhost/React/AI-Invest-Backend/backend(php)/code/auth/logout.php', {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      console.log('Logout successful');
+      localStorage.clear();
+      window.location.reload();
+    } else {
+      console.error('Logout failed');
+    }
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
+}
 </script>

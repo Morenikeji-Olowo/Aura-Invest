@@ -149,58 +149,58 @@ const handleSignIn = async () => {
   isLoading.value = true
   
   try {
-    console.log('Sending login request...', { email: form.email })
-    
-    const response = await fetch('http://localhost/React/AI-Invest-Backend/backend(php)/code/auth/login.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Credentials': 'include'
-      },
-      body: JSON.stringify({
-        email: form.email,
-        password: form.password
-      })
+  console.log('Sending login request...', { email: form.email })
+  
+  const response = await fetch('http://localhost/React/AI-Invest-Backend/backend(php)/code/auth/login.php', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: form.email,
+      password: form.password
     })
-        
-    const data = await response.json()
-    console.log('Response data:', data)
-    
-    // Check if response was successful
-    if (response.ok) {
-      if (data.success) {
-        successMessage.value = data.message || 'Login successful!'
-        console.log('Login successful:', data)
-        
-        if (data.user) {
-          localStorage.setItem('userData', JSON.stringify(data.user))
-        }
-        
-        setTimeout(() => {
-          if (data.user && data.user.hasCompletedOnboarding) {
-            router.push('/dashboard')
-          } else {
-            router.push('/onboarding/step1')
-          }
-        }, 1000)
-        
-      } else {
-        errorMessage.value = data.message || 'Login failed. Please try again.'
+  })
+      
+  const data = await response.json()
+  console.log('Response data:', data)
+  
+  // Check if response was successful
+  if (response.ok) {
+    if (data.success) {
+      successMessage.value = data.message || 'Login successful!'
+      console.log('Login successful:', data)
+      
+      if (data.user) {
+        localStorage.setItem('userData', JSON.stringify(data.user))
       }
+      
+      setTimeout(() => {
+        if (data.user && data.user.hasCompletedOnboarding) {
+          router.push('/dashboard')
+        } else {
+          router.push('/onboarding/step1')
+        }
+      }, 1000)
+      
     } else {
-      errorMessage.value = data.message || `Login failed (HTTP ${response.status})`
+      errorMessage.value = data.message || 'Login failed. Please try again.'
     }
-    
-  } catch (error) {
-    console.error('Login error:', error)
-    if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      errorMessage.value = 'Network error. Please check your connection and try again.'
-    } else {
-      errorMessage.value = 'An unexpected error occurred. Please try again.'
-    }
-  } finally {
-    isLoading.value = false
+  } else {
+    errorMessage.value = data.message || `Login failed (HTTP ${response.status})`
   }
+  
+} catch (error) {
+  console.error('Login error:', error)
+  if (error.name === 'TypeError' && error.message.includes('fetch')) {
+    errorMessage.value = 'Network error. Please check your connection and try again.'
+  } else {
+    errorMessage.value = 'An unexpected error occurred. Please try again.'
+  }
+} finally {
+  isLoading.value = false
+}
 }
 </script>
 

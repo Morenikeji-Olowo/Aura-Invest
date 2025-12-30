@@ -39,17 +39,23 @@
         Back
       </button>
       <button 
-        @click="$router.push('/onboarding/step6')"
-        class="bg-[#800000] text-white px-16 py-4 rounded-xl font-bold text-lg hover:bg-[#600000] shadow-lg shadow-red-900/10 active:scale-95 min-w-[180px]"
+        @click="handleFinish"
+        :disabled="isSaving"
+        class="bg-[#800000] text-white px-16 py-4 rounded-xl font-bold text-lg hover:bg-[#600000] shadow-lg shadow-red-900/10 active:scale-95 min-w-[180px] disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Next
+        {{ isSaving ? 'Saving...' : 'Finish' }}
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onboardingStore } from '../../store/onboardingstore'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { onboardingStore } from '../../store/onboardingStore'
+
+const router = useRouter()
+const isSaving = ref(false)
 
 const horizons = [
   { 
@@ -71,4 +77,39 @@ const horizons = [
     icon: 'fas fa-infinity' 
   }
 ]
+
+const handleFinish = async () => {
+  if (isSaving.value) return
+  
+  isSaving.value = true
+  
+  try {
+    // Call the save method from your store
+    const result = await onboardingStore.saveOnboardingData()
+    
+    if (result.success) {
+      console.log('Onboarding saved successfully!')
+      
+      // Check if user has a name - use from user object or onboardingStore
+      const userName = onboardingStore.user.name || onboardingStore.name
+      
+      // Make sure we have the name in localStorage user object
+      if (userName && !onboardingStore.user.name) {
+        onboardingStore.user.name = userName
+        localStorage.setItem('user', JSON.stringify(onboardingStore.user))
+      }
+      
+      // Redirect to dashboard
+      router.push('/dashboard')
+    } else {
+      console.error('Failed to save onboarding:', result.error)
+      alert('Failed to save your data. Please try again.')
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    alert('An error occurred. Please try again.')
+  } finally {
+    isSaving.value = false
+  }
+}
 </script>

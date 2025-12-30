@@ -1,3 +1,4 @@
+vue
 <template>
   <div class="w-full max-w-3xl">
     <h1 class="text-4xl font-bold mb-8 text-gray-900">
@@ -7,7 +8,7 @@
     <div class="mb-8">
       <label class="block text-sm font-bold mb-2 text-gray-700">Full Name</label>
       <input 
-        v-model="onboardingStore.name"
+        v-model="onboardingStore.user.name" 
         type="text" 
         placeholder="John Doe"
         class="w-full border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-600/10 focus:border-red-600"
