@@ -52,7 +52,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { onboardingStore } from '../../store/onboardingStore'
+import { onboardingStore } from '../../store/onboardingstore'
 
 const router = useRouter()
 const isSaving = ref(false)
