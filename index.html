@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurex AI</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #742a2a, #dbd6d6);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 420px;
+            height: 85vh;
+            background: rgb(209, 209, 209);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #742a2a;
+            padding: 18px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            margin: 10px 0;
+            border-radius: 15px;
+            animation: fadeIn 0.3s ease-in-out;
+            word-wrap: break-word;
+        }
+
+        .user {
+            background: #c8e6c9;
+            text-align: right;
+            margin-left: 50px;
+        }
+
+        .ai {
+            background: #e0e0e0;
+            text-align: left;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-area {
+            display: flex;
+            border-top: 1px solid #742a2a;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .input-area button {
+            background: #000000;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .typing {
+            display: inline-block;
+        }
+
+        .dot {
+            height: 8px;
+            width: 8px;
+            background-color: #555;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="chat-container">
+    <div class="header">Aurex</div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Ask something..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<!-- 👉 Markdown + Sanitizer -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
+<script>
+    const messagesEl = document.getElementById("messages");
+    const inputEl = document.getElementById("userInput");
+
+    function addMessage(text, sender) {
+        const bubble = document.createElement("div");
+        bubble.classList.add("bubble", sender === "user" ? "user" : "ai");
+
+        // Convert markdown → HTML + sanitize
+        const html = marked.parse(text);
+        const clean = DOMPurify.sanitize(html);
+
+        bubble.innerHTML = clean;   // <-- key change
+        messagesEl.appendChild(bubble);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addTypingAnimation() {
+        const bubble = document.createElement("div");
+        bubble.classList.add("bubble", "ai");
+        bubble.id = "typingBubble";
+        bubble.innerHTML = `
+            <span class="typing">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </span>
+        `;
+        messagesEl.appendChild(bubble);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function removeTypingAnimation() {
+        const bubble = document.getElementById("typingBubble");
+        if (bubble) bubble.remove();
+    }
+
+    async function sendMessage() {
+        const message = inputEl.value.trim();
+        if (!message) return;
+
+        addMessage(message, "user");
+        inputEl.value = "";
+
+        addTypingAnimation();
+
+        try {
+            const response = await fetch("http://localhost:5000/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message })
+            });
+
+            const data = await response.json();
+            removeTypingAnimation();
+            addMessage(data.reply, "ai");
+
+        } catch (err) {
+            removeTypingAnimation();
+            addMessage("Error communicating with server.", "ai");
+            console.error(err);
+        }
+    }
+
+    inputEl.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
+</script>
+
+</body>
+</html>
