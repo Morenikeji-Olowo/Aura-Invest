@@ -13,7 +13,7 @@
         <div class="mt-8 text-center">
           <p class="text-gray-600 text-lg mb-4">Don't have an account?</p>
           <button 
-            @click="$router.push('/')"
+            @click="$router.push('/register')"
             class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300"
           >
             SIGN UP

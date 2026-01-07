@@ -13,10 +13,12 @@ import Step6 from "../views/onboarding/Step6AI-Result.vue";
 import Portfolio from "../components/portfolio.vue";
 import test from "../components/test.vue";
 import Signin from "../components/Signin.vue";
+import LandingPage from "../views/LandingPage/LandingPage.vue";
 
 const routes = [
-  { path: "/", component: AuthPage },
+  { path: "/register", component: AuthPage },
   {path: "/login", component: Signin},
+  { path: "/", component: LandingPage },
   {
     path: "/dashboard",
     component: protectedRoute,
