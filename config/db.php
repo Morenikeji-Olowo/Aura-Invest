@@ -1,13 +1,19 @@
-<?php
-$host = getenv("DB_HOST");
-$user = getenv("DB_USER");
-$pass = getenv("DB_PASS");
-$db   = getenv("DB_NAME");
-$port = getenv("DB_PORT") ?: 3306;
+<?php 
+$username = 'root';
+$password = '';
+$database = 'aiproject';
+$host = 'localhost';
 
-$conn = new mysqli($host, $user, $pass, $db, $port);
-
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+$conn = new mysqli($host, $username, $password, $database);
+if($conn->connect_error){
+    die("Connection failed: " . $conn->connect_error);
 }
+
+
+header('Content-Type: application/json'); 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
+
+
 ?>
