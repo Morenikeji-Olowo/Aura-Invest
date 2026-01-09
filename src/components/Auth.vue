@@ -315,6 +315,7 @@ const handleSignup = async () => {
   font-size: 0.875rem;
   transition: all 0.2s;
   background: white;
+  color: black;
 }
 
 .input-field:focus {
@@ -341,6 +342,7 @@ const handleSignup = async () => {
   .input-field {
     padding: 0.6rem 0.8rem;
     border-radius: 0.5rem;
+    color: black;
   }
 }
 
