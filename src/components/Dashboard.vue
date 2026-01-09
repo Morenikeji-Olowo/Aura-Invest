@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#f8f9fa] font-['Inter']">
+  <div class="min-h-screen bg-[#f8f9fa] font-['Inter'] lg:flex">
     <!-- Mobile header (only on mobile) -->
     <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
       <div class="flex items-center justify-between">
@@ -68,10 +68,7 @@
     </aside>
 
     <!-- Main content area -->
-    <main :class="[
-      'min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden',
-      mobileMenuOpen ? 'lg:ml-0' : 'lg:ml-64'
-    ]">
+    <main class="min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden flex-1">
       <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
         <!-- Header -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
