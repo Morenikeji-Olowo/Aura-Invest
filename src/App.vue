@@ -2,10 +2,11 @@
   <div id="app" class="min-h-screen">
     <RouterView v-slot="{ Component, route }">
       <Transition
-        :name="route.meta.noTransition ? '' : 'page'"
+        name="page"
         mode="out-in"
       >
-        <main class="page-content">
+        <!-- Add :key so Vue knows it’s a different page -->
+        <main class="page-content" :key="route.fullPath">
           <component :is="Component" />
         </main>
       </Transition>
