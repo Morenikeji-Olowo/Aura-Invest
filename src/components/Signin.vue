@@ -73,15 +73,21 @@
               <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
               <input 
                 v-model="form.password"
-                type="password" 
+                :type="showPassword ? 'text' : 'password'" 
                 placeholder="**********" 
                 class="w-full pl-10 pr-10 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5a1a1a] focus:border-[#5a1a1a] transition-all bg-white"
                 :disabled="isLoading"
                 required
                 @keyup.enter="handleSignIn"
               />
-              <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                <i class="fas fa-eye"></i>
+              <button
+                type="button"
+                @click="showPassword = !showPassword"
+                :aria-pressed="showPassword"
+                :aria-label="showPassword ? 'Hide password' : 'Show password'"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
               </button>
             </div>
           </div>
@@ -133,6 +139,7 @@ const router = useRouter()
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+const showPassword = ref(false)
 
 onMounted(() => {
   console.log('[Signin] mounted')
