@@ -40,18 +40,18 @@
           </div>
 
           <div class="flex items-center gap-4">
-          <button 
-            @click="router.push('/login')"
-            class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300"
-          >
-            SIGN IN
-          </button>
-          <button 
-            @click="router.push('/register')"
-            class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300"
-          >
-            SIGN UP
-          </button>
+            <router-link
+              to="/login"
+              class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300 text-center"
+            >
+              SIGN IN
+            </router-link>
+            <router-link
+              to="/register"
+              class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300 text-center ml-2"
+            >
+              SIGN UP
+            </router-link>
           </div>
         </div>
       </div>
