@@ -1,217 +1,212 @@
 <template>
-  <div class="flex min-h-screen w-full overflow-hidden bg-[#f8f9fa] font-['Inter']">
-    <!-- Mobile header (only on small screens) -->
-    <div class="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
+  <div class="min-h-screen bg-[#f8f9fa] font-['Inter']">
+    <!-- Mobile header (only on mobile) -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2 text-[#800000] font-bold text-lg">
           <i class="fas fa-chart-pie"></i>
-          <span>Aura Invest</span>
+          <span class="truncate">Aura Invest</span>
         </div>
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 hover:bg-gray-50 rounded-lg transition-colors">
-          <i :class="mobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'" class="text-gray-600 text-xl"></i>
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 hover:bg-gray-50 rounded-lg">
+          <i :class="mobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'" class="text-gray-600 text-lg"></i>
         </button>
       </div>
     </div>
 
     <!-- Mobile menu overlay -->
     <div v-if="mobileMenuOpen" 
-         class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity"
-         @click="mobileMenuOpen = false">
+         @click="mobileMenuOpen = false"
+         class="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50 transition-all duration-300">
     </div>
 
-    <!-- Sidebar (fixed on desktop, slide-in on mobile) -->
+    <!-- Sidebar (hidden on mobile, shown on desktop) -->
     <aside :class="[
-      'bg-white border-r border-gray-100 flex flex-col shrink-0 transition-transform duration-300 ease-in-out overflow-y-auto',
-      'md:w-64 md:static md:translate-x-0 md:h-screen',
-      mobileMenuOpen ? 'fixed top-0 left-0 z-50 w-72 h-screen translate-x-0 shadow-2xl' : 'fixed -translate-x-full'
+      'bg-white border-r border-gray-100 flex flex-col shrink-0 transition-transform duration-300 ease-in-out h-screen fixed lg:static z-40',
+      'w-64',
+      mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]">
-      <div class="p-6 md:p-8">
-        <div class="flex items-center justify-between md:justify-start gap-2 text-[#800000] font-bold text-xl mb-8 md:mb-10">
+      <div class="p-6">
+        <div class="flex items-center justify-between lg:justify-start gap-2 text-[#800000] font-bold text-xl mb-8">
           <div class="flex items-center gap-2">
             <i class="fas fa-chart-pie"></i>
             <span>Aura Invest</span>
           </div>
-          <button @click="mobileMenuOpen = false" class="md:hidden p-2 hover:bg-gray-50 rounded-lg transition-colors">
-            <i class="fas fa-times text-gray-600 text-xl"></i>
+          <button @click="mobileMenuOpen = false" class="lg:hidden p-2 hover:bg-gray-50 rounded-lg">
+            <i class="fas fa-times text-gray-600"></i>
           </button>
         </div>
 
-        <nav class="space-y-2">
+        <nav class="space-y-1">
           <div v-for="item in navItems" :key="item.name" 
             @click="mobileMenuOpen = false"
             :class="[
-              'flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all font-semibold text-sm',
-              item.active ? 'bg-[#800000]/10 text-[#800000]' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+              'flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all font-medium text-sm',
+              item.active ? 'bg-[#800000]/10 text-[#800000]' : 'text-gray-600 hover:bg-gray-50'
             ]"
           >
-            <i :class="item.icon" class="w-5 text-center"></i>
-            {{ item.name }}
+            <i :class="item.icon" class="w-5 text-center text-sm"></i>
+            <span class="truncate">{{ item.name }}</span>
           </div>
         </nav>
       </div>
 
-      <div class="mt-auto p-6 md:p-8 border-t border-gray-50 space-y-4">
-        <div class="flex items-center gap-3 text-gray-400 font-semibold text-sm cursor-pointer hover:text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all">
-          <i class="fas fa-cog w-5 text-center"></i> Settings
+      <div class="mt-auto p-6 border-t border-gray-50 space-y-1">
+        <div class="flex items-center gap-3 text-gray-600 font-medium text-sm cursor-pointer hover:bg-gray-50 px-4 py-3 rounded-lg transition-all">
+          <i class="fas fa-cog w-5 text-center text-sm"></i>
+          <span class="truncate">Settings</span>
         </div>
 
         <button 
           @click="logout"
           :disabled="isSaving"
-          class="flex items-center gap-3 text-gray-400 font-semibold text-sm cursor-pointer hover:text-gray-600 disabled:opacity-50 w-full px-4 py-2 rounded-lg hover:bg-gray-50 transition-all"
+          class="flex items-center gap-3 text-gray-600 font-medium text-sm cursor-pointer hover:bg-gray-50 disabled:opacity-50 w-full px-4 py-3 rounded-lg transition-all text-left"
         >
-          <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
+          <i class="fas fa-sign-out-alt w-5 text-center text-sm"></i>
+          <span class="truncate">Logout</span>
         </button>
       </div>
     </aside>
 
     <!-- Main content area -->
-    <main class="w-full flex-1 p-4 sm:p-6 md:p-8 lg:p-10 overflow-y-auto h-screen mt-[60px] md:mt-0">
-      <!-- Header -->
-      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-10 gap-4">
-        <div>
-          <h1 class="text-2xl sm:text-2xl md:text-3xl font-bold tracking-tight">Welcome back, Alex!</h1>
-          <p class="text-gray-400 text-sm mt-1">Here is your investment progress summary.</p>
-        </div>
-        <div class="flex items-center gap-3 self-end sm:self-auto">
-          <div class="text-right hidden sm:block">
-            <p class="font-bold text-sm">Alex Doe</p>
-            <p class="text-gray-400 text-xs">alex.doe@email.com</p>
-          </div>
-          <img src="https://i.pravatar.cc/150?u=alex" 
-               alt="Profile"
-               class="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-white shadow-sm" />
-        </div>
-      </header>
-
-      <!-- Top Stats Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8 w-full">
-        <div class="bg-white p-5 md:p-6 rounded-[20px] md:rounded-[24px] border border-gray-50 shadow-sm hover:shadow-md transition-shadow">
-          <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Total Balance</p>
-          <p class="text-2xl md:text-3xl font-extrabold">$125,430.50</p>
-          <p class="text-xs text-gray-400 mt-1">Updated today</p>
-        </div>
-        <div class="bg-white p-5 md:p-6 rounded-[20px] md:rounded-[24px] border border-gray-50 shadow-sm hover:shadow-md transition-shadow">
-          <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Weekly Change</p>
-          <p class="text-2xl md:text-3xl font-extrabold text-green-500">
-            +1.25%
-          </p>
-          <p class="text-sm font-normal text-green-400 mt-1">+$1,548.12</p>
-        </div>
-        <div class="bg-white p-5 md:p-6 rounded-[20px] md:rounded-[24px] border border-gray-50 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
-          <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Monthly Change</p>
-          <p class="text-2xl md:text-3xl font-extrabold text-green-500">
-            +5.80%
-          </p>
-          <p class="text-sm font-normal text-green-400 mt-1">+$6,890.44</p>
-        </div>
-      </div>
-
-      <!-- Main Content Grid -->
-      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 md:gap-8 w-full pb-6">
-        <!-- Left Column (8 cols on XL) -->
-        <div class="xl:col-span-8 space-y-6 md:space-y-8 w-full">
-          <!-- Portfolio Chart -->
-          <div class="bg-white p-5 md:p-6 lg:p-8 rounded-[20px] md:rounded-[30px] border border-gray-50 shadow-sm hover:shadow-md transition-shadow w-full">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6 gap-3">
-              <h3 class="font-bold text-lg md:text-xl">Portfolio Performance</h3>
-              <div class="flex gap-1.5 md:gap-2 w-full sm:w-auto overflow-x-auto pb-1 scrollbar-hide">
-                <button class="text-xs px-3 py-1.5 rounded-lg text-gray-400 hover:bg-gray-50 whitespace-nowrap transition-colors">1W</button>
-                <button class="text-xs px-3 py-1.5 rounded-lg text-gray-400 hover:bg-gray-50 whitespace-nowrap transition-colors">1M</button>
-                <button class="text-xs px-3 py-1.5 rounded-lg bg-[#800000]/10 text-[#800000] font-semibold whitespace-nowrap">3M</button>
-                <button class="text-xs px-3 py-1.5 rounded-lg text-gray-400 hover:bg-gray-50 whitespace-nowrap transition-colors">1Y</button>
-                <button class="text-xs px-3 py-1.5 rounded-lg text-gray-400 hover:bg-gray-50 whitespace-nowrap transition-colors">All</button>
-              </div>
-            </div>
-            <div class="h-48 md:h-56 lg:h-64 w-full bg-gradient-to-t from-[#800000]/5 to-transparent rounded-xl flex items-end px-3 md:px-4 gap-1 md:gap-2">
-              <div v-for="n in 12" :key="n" class="flex-1 bg-[#800000] rounded-t-sm opacity-20 hover:opacity-40 transition-opacity cursor-pointer" 
-                   :style="{ height: Math.random() * 80 + 20 + '%' }"></div>
-            </div>
-            <div class="mt-4 flex justify-center gap-6 text-xs text-gray-400">
-              <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-[#800000] rounded-full"></div>
-                <span>Growth</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Goals Section -->
+    <main :class="[
+      'min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden',
+      mobileMenuOpen ? 'lg:ml-0' : 'lg:ml-64'
+    ]">
+      <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div class="w-full">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6 gap-3">
-              <h3 class="font-bold text-lg md:text-xl">Your Goals</h3>
-              <button class="text-xs font-bold text-[#800000] px-4 py-2 rounded-lg border border-[#800000]/20 hover:bg-[#800000]/5 whitespace-nowrap transition-all w-full sm:w-auto">
-                <i class="fas fa-plus mr-2"></i>Add New Goal
-              </button>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, Alex!</h1>
+            <p class="text-gray-500 text-sm mt-1">Here is your investment progress summary.</p>
+          </div>
+          <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <div class="text-right hidden sm:block">
+              <p class="font-medium text-sm text-gray-900">Alex Doe</p>
+              <p class="text-gray-500 text-xs">alex.doe@email.com</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
-              <div v-for="goal in goals" :key="goal.title" class="bg-white p-5 md:p-6 rounded-[20px] md:rounded-[24px] border border-gray-50 shadow-sm hover:shadow-md transition-shadow w-full">
-                <div class="flex justify-between mb-4">
-                  <span class="font-bold text-sm md:text-base">{{ goal.title }}</span>
-                  <span class="text-[#800000] font-bold text-sm md:text-base">{{ goal.progress }}%</span>
-                </div>
-                <div class="w-full h-2 bg-gray-100 rounded-full mb-4 overflow-hidden">
-                  <div class="h-full bg-[#800000] rounded-full transition-all duration-500" 
-                       :style="{ width: goal.progress + '%' }"></div>
-                </div>
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                  <span class="text-gray-400 text-xs font-medium">Target: ${{ goal.target.toLocaleString() }}</span>
-                  <button class="text-xs font-bold border border-gray-200 px-4 py-1.5 rounded-lg hover:bg-gray-50 hover:border-[#800000] hover:text-[#800000] whitespace-nowrap transition-all w-full sm:w-auto">
-                    Top Up
-                  </button>
-                </div>
-              </div>
-            </div>
+            <img src="https://i.pravatar.cc/150?u=alex" 
+                 alt="Profile"
+                 class="w-10 h-10 rounded-full border-2 border-white shadow" />
+          </div>
+        </header>
+
+        <!-- Top Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <p class="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Total Balance</p>
+            <p class="text-2xl sm:text-3xl font-bold text-gray-900">$125,430.50</p>
+            <p class="text-gray-400 text-xs mt-1">Updated today</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <p class="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Weekly Change</p>
+            <p class="text-2xl sm:text-3xl font-bold text-green-600">+1.25%</p>
+            <p class="text-green-500 text-sm mt-1">+$1,548.12</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <p class="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Monthly Change</p>
+            <p class="text-2xl sm:text-3xl font-bold text-green-600">+5.80%</p>
+            <p class="text-green-500 text-sm mt-1">+$6,890.44</p>
           </div>
         </div>
 
-        <!-- Right Column (4 cols on XL) -->
-        <div class="xl:col-span-4 space-y-6 md:space-y-8 w-full">
-          <!-- Asset Allocation -->
-          <div class="bg-white p-5 md:p-6 lg:p-8 rounded-[20px] md:rounded-[30px] border border-gray-50 shadow-sm hover:shadow-md transition-shadow w-full">
-            <h3 class="font-bold text-lg md:text-xl mb-6">Asset Allocation</h3>
-            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-[14px] md:border-[18px] border-[#800000] border-l-gray-200 border-b-gray-400 mx-auto mb-6 flex items-center justify-center shadow-inner">
-              <span class="font-extrabold text-base md:text-lg">100%</span>
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <!-- Left Column (2/3 on large screens) -->
+          <div class="xl:col-span-2 space-y-6">
+            <!-- Portfolio Chart -->
+            <div class="bg-white p-4 sm:p-6 rounded-xl border border-gray-200 shadow-sm">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                <h3 class="text-lg font-semibold text-gray-900">Portfolio Performance</h3>
+                <div class="flex gap-1 w-full sm:w-auto overflow-x-auto">
+                  <button class="text-xs px-3 py-1.5 rounded-lg text-gray-500 hover:bg-gray-50 whitespace-nowrap">1W</button>
+                  <button class="text-xs px-3 py-1.5 rounded-lg text-gray-500 hover:bg-gray-50 whitespace-nowrap">1M</button>
+                  <button class="text-xs px-3 py-1.5 rounded-lg bg-[#800000]/10 text-[#800000] font-medium whitespace-nowrap">3M</button>
+                  <button class="text-xs px-3 py-1.5 rounded-lg text-gray-500 hover:bg-gray-50 whitespace-nowrap">1Y</button>
+                  <button class="text-xs px-3 py-1.5 rounded-lg text-gray-500 hover:bg-gray-50 whitespace-nowrap">All</button>
+                </div>
+              </div>
+              <div class="h-48 w-full bg-gradient-to-t from-[#800000]/5 to-transparent rounded-lg flex items-end px-2 gap-1">
+                <div v-for="n in 12" :key="n" 
+                     class="flex-1 bg-[#800000] rounded-t-sm opacity-20" 
+                     :style="{ height: Math.random() * 80 + 20 + '%' }"></div>
+              </div>
             </div>
-            <div class="space-y-3 text-sm md:text-base">
-              <div class="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 rounded-full bg-[#800000]"></div>
-                  <span class="text-gray-600">Stocks</span>
-                </div>
-                <span class="font-bold">60%</span>
+
+            <!-- Goals Section -->
+            <div>
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                <h3 class="text-lg font-semibold text-gray-900">Your Goals</h3>
+                <button class="text-sm font-medium text-[#800000] px-4 py-2 rounded-lg border border-[#800000]/20 hover:bg-[#800000]/5 whitespace-nowrap w-full sm:w-auto">
+                  <i class="fas fa-plus mr-2"></i>Add New Goal
+                </button>
               </div>
-              <div class="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 rounded-full bg-gray-400"></div>
-                  <span class="text-gray-600">Bonds</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div v-for="goal in goals" :key="goal.title" 
+                     class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                  <div class="flex justify-between mb-3">
+                    <span class="font-medium text-gray-900 text-sm">{{ goal.title }}</span>
+                    <span class="text-[#800000] font-semibold text-sm">{{ goal.progress }}%</span>
+                  </div>
+                  <div class="w-full h-2 bg-gray-100 rounded-full mb-3 overflow-hidden">
+                    <div class="h-full bg-[#800000] rounded-full" 
+                         :style="{ width: goal.progress + '%' }"></div>
+                  </div>
+                  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <span class="text-gray-500 text-xs">Target: ${{ goal.target.toLocaleString() }}</span>
+                    <button class="text-xs font-medium border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50 w-full sm:w-auto">
+                      Top Up
+                    </button>
+                  </div>
                 </div>
-                <span class="font-bold">25%</span>
-              </div>
-              <div class="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 rounded-full bg-gray-200"></div>
-                  <span class="text-gray-600">Crypto</span>
-                </div>
-                <span class="font-bold">15%</span>
               </div>
             </div>
           </div>
 
-          <!-- AI Insights -->
-          <div class="bg-[#800000]/5 p-5 md:p-6 lg:p-8 rounded-[20px] md:rounded-[30px] border border-[#800000]/10 w-full">
-            <h3 class="font-bold text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2">
-              <i class="fas fa-lightbulb text-[#800000]"></i> AI Insights
-            </h3>
-            <div class="space-y-4 md:space-y-5">
-              <div v-for="insight in insights" :key="insight.title" class="bg-white p-4 md:p-5 rounded-xl md:rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-start gap-3">
-                  <div class="w-8 h-8 bg-[#800000]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-chart-line text-[#800000] text-sm"></i>
+          <!-- Right Column (1/3 on large screens) -->
+          <div class="space-y-6">
+            <!-- Asset Allocation -->
+            <div class="bg-white p-4 sm:p-6 rounded-xl border border-gray-200 shadow-sm">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Asset Allocation</h3>
+              <div class="w-32 h-32 mx-auto mb-4 relative">
+                <div class="w-full h-full rounded-full border-[12px] border-[#800000] border-l-gray-200 border-b-gray-400 flex items-center justify-center">
+                  <span class="font-bold text-gray-900">100%</span>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50">
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-[#800000]"></div>
+                    <span class="text-gray-700 text-sm">Stocks</span>
                   </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="font-bold text-sm mb-1.5">{{ insight.title }}</p>
-                    <p class="text-gray-400 text-xs leading-relaxed">{{ insight.desc }}</p>
+                  <span class="font-semibold text-gray-900">60%</span>
+                </div>
+                <div class="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50">
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-gray-400"></div>
+                    <span class="text-gray-700 text-sm">Bonds</span>
                   </div>
+                  <span class="font-semibold text-gray-900">25%</span>
+                </div>
+                <div class="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50">
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-gray-300"></div>
+                    <span class="text-gray-700 text-sm">Crypto</span>
+                  </div>
+                  <span class="font-semibold text-gray-900">15%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Insights -->
+            <div class="bg-[#800000]/5 p-4 sm:p-6 rounded-xl border border-[#800000]/10">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fas fa-lightbulb text-[#800000]"></i>AI Insights
+              </h3>
+              <div class="space-y-3">
+                <div v-for="insight in insights" :key="insight.title" 
+                     class="bg-white p-3 rounded-lg shadow-sm">
+                  <p class="font-medium text-gray-900 text-sm mb-1">{{ insight.title }}</p>
+                  <p class="text-gray-500 text-xs">{{ insight.desc }}</p>
                 </div>
               </div>
             </div>
@@ -246,9 +241,9 @@ const goals = [
 
 // AI Insights data
 const insights = [
-  { title: 'Market Trends', desc: 'The stock market is expected to rise in the next quarter based on current economic indicators.' },
-  { title: 'Risk Assessment', desc: 'Your current portfolio is well-balanced with a moderate risk level suitable for long-term growth.' },
-  { title: 'Performance Forecast', desc: 'Based on current trends, your portfolio is projected to grow by 5% in the next year.' }
+  { title: 'Market Trends', desc: 'The stock market is expected to rise in the next quarter.' },
+  { title: 'Risk Assessment', desc: 'Your portfolio has a moderate risk level.' },
+  { title: 'Performance Forecast', desc: 'Projected 5% growth in the next year.' }
 ]
 
 const logout = async () => {  
@@ -274,36 +269,21 @@ const logout = async () => {
 }
 </script>
 
-<style scoped>
+<style>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-/* Custom scrollbar for main content */
-main::-webkit-scrollbar {
-  width: 6px;
-}
-
-main::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-main::-webkit-scrollbar-thumb {
-  background: #800000;
-  border-radius: 10px;
-}
-
-main::-webkit-scrollbar-thumb:hover {
-  background: #600000;
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  .sm\:grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .xl\:col-span-2 {
+    grid-column: span 1;
+  }
+  
+  .xl\:col-span-3 {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
