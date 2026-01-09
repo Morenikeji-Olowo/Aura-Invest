@@ -1,13 +1,9 @@
 <template>
-  <RouterView v-slot="{ Component, route }">
-    <transition name="page-slide" mode="out-in">
-      <component :is="Component" :key="route.fullPath" />
-    </transition>
-  </RouterView>
+  <RouterView />
 </template>
 
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView } from "vue-router";
 </script>
 
 <style>
