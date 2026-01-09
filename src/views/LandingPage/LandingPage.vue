@@ -69,7 +69,7 @@
             <div class="flex flex-wrap gap-4">
               <button
                 type="button"
-                @click="router.push('/register')"
+                @click="goRegister"
                 class="bg-[#800000] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#600000] transition-all hover:shadow-xl flex items-center gap-2"
               >
                 Get Started
@@ -644,6 +644,9 @@ import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const goRegister = () => {
+  router.push("/register");
+};
 
 const showChat = ref(false);
 const userInput = ref("");
