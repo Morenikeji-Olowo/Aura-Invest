@@ -15,7 +15,6 @@ export const onboardingStore = reactive({
   // NEW: Save onboarding data to backend
   async saveOnboardingData() {
     try {
-      // Prepare the data - use name from user object
       const userName = this.user.name || ''
       
       const response = await fetch(
@@ -39,7 +38,6 @@ export const onboardingStore = reactive({
       const data = await response.json()
       
       if (data.success) {
-        // Update user data with completed status
         this.user.hasCompletedOnboarding = true
         localStorage.setItem('user', JSON.stringify(this.user))
         
@@ -53,7 +51,6 @@ export const onboardingStore = reactive({
     }
   },
 
-  // Helper to navigate
   next(router, stepNumber) {
     router.push(`/onboarding/step${stepNumber}`)
   },
@@ -67,7 +64,6 @@ export const onboardingStore = reactive({
       }
       localStorage.setItem('user', JSON.stringify(this.user))
       
-      // Check if user needs onboarding
       if (userData.has_onboarded) {
         router.push('/dashboard')
       } else {
@@ -78,7 +74,6 @@ export const onboardingStore = reactive({
     }
   },
 
-  // Load user from localStorage
   loadUser() {
     const saved = localStorage.getItem('user')
     if (saved) {
@@ -86,7 +81,6 @@ export const onboardingStore = reactive({
     }
   },
 
-  // Logout
   logout(router) {
     this.user = { 
       name: '', 
@@ -99,5 +93,4 @@ export const onboardingStore = reactive({
   }
 })
 
-// Load user on app start
 onboardingStore.loadUser()
