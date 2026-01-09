@@ -126,13 +126,17 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+
+onMounted(() => {
+  console.log('[Signin] mounted')
+})
 
 // Form data
 const form = reactive({
@@ -206,15 +210,6 @@ const handleSignIn = async () => {
 
 <style>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-
-body, html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  background-color: white;
-  height: 100vh;
-  overflow: hidden;
-}
 
 /* Custom focus styles for #5a1a1a color */
 input:focus {

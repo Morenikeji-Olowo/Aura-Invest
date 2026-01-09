@@ -49,7 +49,23 @@ const routes = [
   { path: "/test", component: test },
 ];
 
-export default createRouter({
-  history: createWebHashHistory(), 
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
 });
+
+// Lightweight navigation diagnostics to help debug navigation/render issues
+router.beforeEach((to, from, next) => {
+  console.log(`[router] navigating from ${from.fullPath} to ${to.fullPath}`);
+  next();
+});
+
+router.afterEach((to, from) => {
+  console.log(`[router] finished navigation to ${to.fullPath}`);
+});
+
+router.onError((err) => {
+  console.error('[router] navigation error:', err);
+});
+
+export default router;
