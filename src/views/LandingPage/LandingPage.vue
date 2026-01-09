@@ -12,30 +12,24 @@
           </div>
 
           <div class="hidden md:flex items-center gap-8">
-            <a
-              href="#home"
+            <p
               class="text-gray-600 hover:text-[#800000] transition-colors font-medium"
-              >Home</a
+              >Home</p            >
+            <p
+              class="text-gray-600 hover:text-[#800000] transition-colors font-medium"
+              >Features</p
             >
-            <a
-              href="#features"
+            <p
               class="text-gray-600 hover:text-[#800000] transition-colors font-medium"
-              >Features</a
+              >About</p
             >
-            <a
-              href="#about"
+            <p
               class="text-gray-600 hover:text-[#800000] transition-colors font-medium"
-              >About</a
+              >Reviews</p
             >
-            <a
-              href="#testimonials"
+            <p
               class="text-gray-600 hover:text-[#800000] transition-colors font-medium"
-              >Reviews</a
-            >
-            <a
-              href="#blog"
-              class="text-gray-600 hover:text-[#800000] transition-colors font-medium"
-              >Blog</a
+              >Blog</p
             >
           </div>
         </div>
