@@ -40,19 +40,18 @@
           </div>
 
           <div class="flex items-center gap-4">
-            <router-link
-              to="/login"
-              class="text-[#800000] font-semibold hover:text-[#600000] transition-colors"
-            >
-              Sign In
-            </router-link>
-
-            <router-link
-              to="/register"
-              class="bg-[#800000] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#600000] transition-all hover:shadow-lg"
-            >
-              Get Started
-            </router-link>
+          <button 
+            @click="$router.push('/login')"
+            class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300"
+          >
+            SIGN IN
+          </button>
+          <button 
+            @click="$router.push('/register')"
+            class="w-full max-w-xs mx-auto bg-gradient-to-r from-[#5a1a1a] to-[#741919] text-white py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-[#5a1a1a]/30 transition-all duration-300"
+          >
+            SIGN UP
+          </button>
           </div>
         </div>
       </div>
@@ -655,6 +654,9 @@
 
 <script setup>
 import { ref, nextTick } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const showChat = ref(false);
 const userInput = ref("");
