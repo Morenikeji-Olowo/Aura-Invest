@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <!-- Mobile menu overlay -->
+    <!-- Mobile menu overlayy -->
     <div v-if="mobileMenuOpen" 
          @click="mobileMenuOpen = false"
          class="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50 transition-all duration-300">
