@@ -30,7 +30,7 @@
         <div class="flex items-center justify-between lg:justify-start gap-2 text-[#800000] font-bold text-xl mb-8">
           <div class="flex items-center gap-2">
             <i class="fas fa-chart-pie"></i>
-            <span>Aura Invest</span>
+            <span>Aura-Invest</span>
           </div>
           <button @click="mobileMenuOpen = false" class="lg:hidden p-2 hover:bg-gray-50 rounded-lg">
             <i class="fas fa-times text-gray-600"></i>
