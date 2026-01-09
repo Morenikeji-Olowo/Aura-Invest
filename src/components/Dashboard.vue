@@ -180,7 +180,7 @@ const insights = [
 const logout = async () => {  
   
   try {
-    const response = await fetch('http://localhost/React/AI-Invest-Backend/backend(php)/code/auth/logout.php', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/auth/logout.php`, {
       method: 'POST',
       credentials: 'include',
     });

@@ -208,7 +208,7 @@ const handleSignup = async () => {
   isLoading.value = true
   
   try {
-    const response = await fetch('http://localhost/React/AI-Invest-Backend/backend(php)/code/auth/register.php', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/auth/register.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

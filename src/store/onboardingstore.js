@@ -19,7 +19,7 @@ export const onboardingStore = reactive({
       const userName = this.user.name || ''
       
       const response = await fetch(
-        "http://localhost/React/AI-Invest-Backend/backend(php)/code/onboarding/save.php",
+        `${import.meta.env.VITE_API_BASE_URL}/code/onboarding/save.php`,
         {
           method: "POST",
           credentials: "include",

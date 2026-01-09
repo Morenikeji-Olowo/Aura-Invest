@@ -151,7 +151,7 @@ const handleSignIn = async () => {
   try {
   console.log('Sending login request...', { email: form.email })
   
-  const response = await fetch('http://localhost/React/AI-Invest-Backend/backend(php)/code/auth/login.php', {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/auth/login.php`, {
     method: 'POST',
     credentials: 'include',
     headers: {
