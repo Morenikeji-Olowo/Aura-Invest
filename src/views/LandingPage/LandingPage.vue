@@ -370,12 +370,12 @@
                 Discover powerful strategies to improve your financial health
                 and achieve your goals.
               </p>
-              <a
-                href="#"
+              <p
+                
                 class="text-[#800000] font-semibold text-sm flex items-center gap-2 hover:gap-3 transition-all"
               >
                 Read More <i class="fas fa-arrow-right"></i>
-              </a>
+            </p>
             </div>
           </div>
         </div>
@@ -427,30 +427,28 @@
               financial solutions and personalized investment strategies.
             </p>
             <div class="flex gap-3">
-              <a
-                href="#"
+              <p
+                
                 class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#800000] transition-all"
               >
                 <i class="fab fa-facebook-f"></i>
-              </a>
-              <a
-                href="#"
+            </p>
+              <p
+        
                 class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#800000] transition-all"
               >
                 <i class="fab fa-twitter"></i>
-              </a>
-              <a
-                href="#"
+              </p>
+              <p
                 class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#800000] transition-all"
               >
                 <i class="fab fa-linkedin-in"></i>
-              </a>
-              <a
-                href="#"
+              </p>
+              <p
                 class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#800000] transition-all"
               >
                 <i class="fab fa-instagram"></i>
-              </a>
+              </p>
             </div>
           </div>
 
@@ -458,31 +456,27 @@
             <h4 class="font-bold mb-4">Resources</h4>
             <ul class="space-y-3">
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Blog</a
+                  >Blog</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Help Center</a
+                  >Help Center</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Guides</a
+                  >Guides</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Webinars</a
+                  >Webinars</p
                 >
               </li>
             </ul>
@@ -492,31 +486,27 @@
             <h4 class="font-bold mb-4">Product</h4>
             <ul class="space-y-3">
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Features</a
+                  >Features</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Pricing</a
+                  >Pricing</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Security</a
+                  >Security</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Enterprise</a
+                  >Enterprise</p
                 >
               </li>
             </ul>
@@ -526,31 +516,27 @@
             <h4 class="font-bold mb-4">Company</h4>
             <ul class="space-y-3">
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >About Us</a
+                  >About Us</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Careers</a
+                <p
+=                  class="text-gray-400 hover:text-white transition-colors"
+                  >Careers</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Press Kit</a
+                  >Press Kit</p
                 >
               </li>
               <li>
-                <a
-                  href="#"
+                <p
                   class="text-gray-400 hover:text-white transition-colors"
-                  >Contact</a
+                  >Contact</p
                 >
               </li>
             </ul>
@@ -564,14 +550,14 @@
             © 2024 Aura Invest. All rights reserved.
           </p>
           <div class="flex gap-6 text-sm">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors"
-              >Privacy Policy</a
+            <p class="text-gray-400 hover:text-white transition-colors"
+              >Privacy Policy</p
             >
-            <a href="#" class="text-gray-400 hover:text-white transition-colors"
-              >Terms of Service</a
+            <p class="text-gray-400 hover:text-white transition-colors"
+              >Terms of Service</p
             >
-            <a href="#" class="text-gray-400 hover:text-white transition-colors"
-              >Cookie Policy</a
+            <p class="text-gray-400 hover:text-white transition-colors"
+              >Cookie Policy</p
             >
           </div>
         </div>
