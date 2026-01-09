@@ -1,9 +1,5 @@
 <template>
   <div id="app" class="min-h-screen">
-    <!-- Navigation stays fixed -->
-    <NavBar />
-
-    <!-- Main content with smooth transition -->
     <RouterView v-slot="{ Component, route }">
       <Transition
         :name="route.meta.noTransition ? '' : 'page'"
@@ -14,20 +10,10 @@
         </main>
       </Transition>
     </RouterView>
-
-    <!-- Footer stays fixed -->
-    <Footer />
-
-    <!-- Chat Widget stays fixed -->
-    <ChatWidget />
   </div>
 </template>
 
-<script setup>
-import NavBar from "./components/NavBar.vue";
-import Footer from "./components/Footer.vue";
-import ChatWidget from "./components/ChatWidget.vue";
-</script>
+<script setup></script>
 
 <style>
 /* Smooth fade-only transition */
