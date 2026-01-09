@@ -85,9 +85,9 @@
                 @click="showPassword = !showPassword"
                 :aria-pressed="showPassword"
                 :aria-label="showPassword ? 'Hide password' : 'Show password'"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 w-8 h-8 flex items-center justify-center"
               >
-                <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                <i :class="[showPassword ? 'fas fa-eye-slash' : 'fas fa-eye', 'text-sm']"></i>
               </button>
             </div>
           </div>
