@@ -67,20 +67,20 @@
               management. Start building your wealth today.
             </p>
             <div class="flex flex-wrap gap-4">
-              <button
-                type="button"
-                @click="goRegister"
-                class="bg-[#800000] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#600000] transition-all hover:shadow-xl flex items-center gap-2"
+              <router-link
+                to="/register"
+                class="bg-[#800000] text-white px-8 py-4 rounded-lg font-semibold"
               >
                 Get Started
-                <i class="fas fa-arrow-right"></i>
-              </button>
-              <button
+              </router-link>
+
+              <router-link
+                to="/login"
                 class="border-2 border-gray-200 text-gray-700 px-8 py-4 rounded-lg font-semibold hover:border-[#800000] hover:text-[#800000] transition-all flex items-center gap-2"
               >
                 <i class="fas fa-play-circle"></i>
                 See How It Works
-              </button>
+              </router-link>
             </div>
           </div>
 
@@ -644,13 +644,12 @@ import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const goRegister = () => {
-  router.push({
-    path: "/register",
-    query: { t: Date.now() },
-  });
-};
-
+// const goRegister = () => {
+//   router.push({
+//     path: "/register",
+//     query: { t: Date.now() },
+//   });
+// };
 
 const showChat = ref(false);
 const userInput = ref("");
