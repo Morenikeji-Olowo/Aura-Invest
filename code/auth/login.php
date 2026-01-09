@@ -1,10 +1,13 @@
 <?php
 include '../../config/db.php';
 session_start();
+$frontend_origin = "https://aurainvestfront-o4ksfwed4-morenikeji-olowos-projects.vercel.app";
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: $frontend_origin");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true"); // 👈 allow cookies
+
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }

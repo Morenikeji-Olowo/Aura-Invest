@@ -1,9 +1,13 @@
 <?php
 session_start();
 
-header("Access-Control-Allow-Origin: *");
+$frontend_origin = "https://aurainvestfront-o4ksfwed4-morenikeji-olowos-projects.vercel.app";
+
+header("Access-Control-Allow-Origin: $frontend_origin");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true"); // 👈 allow cookies
+
 if (isset($_SESSION['userId'])) {
     echo json_encode([
         "loggedIn" => true,
