@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import AuthPage from "../components/Auth.vue";
 import OnboardingLayout from "../views/onboarding/OnboardingLayout.vue";
 import Dashboard from "../components/Dashboard.vue";
-import portfolio from "../components/portfolio.vue";
+import Portfolio from "../components/portfolio.vue";
 import protectedRoute from "../utils/protectedRoute.vue";
 import Step1 from "../views/onboarding/Step1Welcome.vue";
 import Step2 from "../views/onboarding/Step2Knowledge.vue";
@@ -10,14 +10,13 @@ import Step3 from "../views/onboarding/Step3Risk.vue";
 import Step4 from "../views/onboarding/Step4Goal.vue";
 import Step5 from "../views/onboarding/Step5Horizon.vue";
 import Step6 from "../views/onboarding/Step6AI-Result.vue";
-import Portfolio from "../components/portfolio.vue";
 import test from "../components/test.vue";
 import Signin from "../components/Signin.vue";
 import LandingPage from "../views/LandingPage/LandingPage.vue";
 
 const routes = [
   { path: "/register", component: AuthPage },
-  {path: "/login", component: Signin},
+  { path: "/login", component: Signin },
   { path: "/", component: LandingPage },
   {
     path: "/dashboard",
@@ -27,14 +26,8 @@ const routes = [
   {
     path: "/portfolio",
     component: protectedRoute,
-    children: [
-      {
-        path: "",
-        component: Portfolio,
-      },
-    ],
+    children: [{ path: "", component: Portfolio }],
   },
-
   {
     path: "/onboarding",
     component: protectedRoute,
@@ -57,6 +50,6 @@ const routes = [
 ];
 
 export default createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(), 
   routes,
 });
