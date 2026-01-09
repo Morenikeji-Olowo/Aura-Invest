@@ -523,7 +523,7 @@
               </li>
               <li>
                 <p
-=                  class="text-gray-400 hover:text-white transition-colors"
+      class="text-gray-400 hover:text-white transition-colors"
                   >Careers</p
                 >
               </li>
