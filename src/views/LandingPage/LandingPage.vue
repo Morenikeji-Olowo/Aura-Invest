@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-white font-['Inter']">
     <!-- Navigation -->
     <nav
-      class="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50"
+      class="fixed top-0 w-full bg-white/94 backdrop-blur-sm border-b border-gray-100 z-50"
     >
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
