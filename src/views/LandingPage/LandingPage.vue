@@ -68,7 +68,7 @@
             </p>
             <div class="flex flex-wrap gap-4">
               <button
-
+                type="button"
                 @click="router.push('/register')"
                 class="bg-[#800000] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#600000] transition-all hover:shadow-xl flex items-center gap-2"
               >
