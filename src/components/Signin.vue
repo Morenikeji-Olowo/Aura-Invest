@@ -77,7 +77,7 @@
           <div class="space-y-1.5">
             <div class="flex justify-between items-center">
               <label class="block text-sm font-medium text-gray-700">Password</label>
-              <button type="button" class="text-xs text-[#5a1a1a] hover:text-[#741919] font-medium">
+              <button type="button" class="bg-white text-xs text-[#5a1a1a] hover:text-[#741919] font-medium">
                 Forgot Password?
               </button>
             </div>
@@ -97,7 +97,7 @@
                 @click="showPassword = !showPassword"
                 :aria-pressed="showPassword"
                 :aria-label="showPassword ? 'Hide password' : 'Show password'"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 w-8 h-8 flex items-center justify-center z-10 focus:outline-none focus:ring-2 focus:ring-[#5a1a1a]"
+                class=" bg-white absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 w-8 h-8 flex items-center justify-center z-10 focus:outline-none focus:ring-2 focus:ring-[#5a1a1a]"
               >
                 <i :class="[showPassword ? 'fas fa-eye-slash' : 'fas fa-eye', 'text-xs']"></i>
               </button>
@@ -133,7 +133,7 @@
         <div class="mt-6 text-center">
           <p class="text-gray-600 text-xs">
             Don't have an account?
-            <button type="button" @click="$router.push('/register')" class="text-[#5a1a1a] hover:text-[#741919] font-medium ml-1">
+            <button type="button" @click="$router.push('/register')" class="text-[#5a1a1a] hover:text-[#741919] bg-white font-medium ml-1">
               Create Account
             </button>
           </p>

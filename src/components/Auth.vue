@@ -119,7 +119,7 @@
                 @click="showPassword = !showPassword"
                 :aria-pressed="showPassword"
                 :aria-label="showPassword ? 'Hide password' : 'Show password'"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 w-8 h-8 flex items-center justify-center"
+                class="bg-white absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 w-8 h-8 flex items-center justify-center"
               >
                 <i :class="[showPassword ? 'fas fa-eye-slash' : 'fas fa-eye', 'text-sm']"></i>
               </button>
@@ -145,7 +145,7 @@
                 @click="showConfirmPassword = !showConfirmPassword"
                 :aria-pressed="showConfirmPassword"
                 :aria-label="showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 w-8 h-8 flex items-center justify-center"
+                class="bg-white absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 w-8 h-8 flex items-center justify-center"
               >
                 <i :class="[showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye', 'text-sm']"></i>
               </button>
