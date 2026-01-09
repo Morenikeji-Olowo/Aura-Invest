@@ -19,6 +19,7 @@
          class="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50 transition-all duration-300">
     </div>
 
+    <!--trying to make it flex-->
     <!-- Sidebar (hidden on mobile, shown on desktop) -->
     <aside :class="[
       'bg-white border-r border-gray-100 flex flex-col shrink-0 transition-transform duration-300 ease-in-out h-screen fixed lg:static z-40',
