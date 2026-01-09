@@ -1,5 +1,9 @@
 <template>
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <Transition name="page" mode="out-in">
+      <component :is="Component" />
+    </Transition>
+  </RouterView>
 </template>
 
 <script setup>
@@ -7,27 +11,19 @@ import { RouterView } from "vue-router";
 </script>
 
 <style>
-/* Smooth fade and slight slide up animation */
-.page-slide-enter-active,
-.page-slide-leave-active {
-  transition: all 0.4s ease;
+/* Fade + subtle slide */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.page-slide-enter-from {
+.page-enter-from {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
 }
 
-.page-slide-leave-to {
+.page-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
-}
-
-/* Global resets to ensure the Dashboard fills the screen */
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background-color: #f8f9fa; /* Matches Dashboard background */
+  transform: translateY(-8px);
 }
 </style>
