@@ -41,7 +41,7 @@ const verifyAuth = async () => {
   
   if (!loggedIn.value) {
     console.log('protectedRoute: not logged in — redirecting to /')
-    router.push('/') // Redirect to login page
+    router.push('/') 
   } else {
     console.log('protectedRoute: user is logged in')
   }
@@ -50,7 +50,6 @@ const verifyAuth = async () => {
 onMounted(async () => {
   await verifyAuth()
   
-  // Optional: Listen for storage changes (if user logs out in another tab)
   window.addEventListener('storage', async (event) => {
     if (event.key === 'userData') {
       console.log('protectedRoute: localStorage changed, re-checking auth')

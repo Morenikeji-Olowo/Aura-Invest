@@ -645,8 +645,12 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const goRegister = () => {
-  router.push("/register");
+  router.push({
+    path: "/register",
+    query: { t: Date.now() },
+  });
 };
+
 
 const showChat = ref(false);
 const userInput = ref("");

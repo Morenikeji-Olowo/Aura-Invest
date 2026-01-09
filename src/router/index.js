@@ -17,7 +17,6 @@ import LandingPage from "../views/LandingPage/LandingPage.vue";
 const routes = [
   { path: "/register", component: AuthPage },
   { path: "/login", component: Signin },
-  { path: "/", component: LandingPage },
   {
     path: "/dashboard",
     component: protectedRoute,
@@ -47,6 +46,7 @@ const routes = [
     ],
   },
   { path: "/test", component: test },
+  { path: "/", component: LandingPage },
 ];
 
 const router = createRouter({
