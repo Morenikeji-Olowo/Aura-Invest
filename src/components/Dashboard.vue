@@ -51,7 +51,7 @@
         </nav>
       </div>
 
-      <div class="mt-auto p-6 border-t border-gray-50 space-y-1">
+      <div class="mt-auto p-3 border-t border-gray-50 space-y-1">
         <div class="flex items-center gap-3 text-gray-600 font-medium text-sm cursor-pointer hover:bg-gray-50 px-4 py-3 rounded-lg transition-all">
           <i class="fas fa-cog w-5 text-center text-sm"></i>
           <span class="truncate">Settings</span>
