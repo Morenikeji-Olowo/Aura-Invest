@@ -74,13 +74,12 @@
         <!-- Header -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div class="w-full">
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, {{ Udetails.full_name }}</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, {{ Udetails.name }}</h1>
             <p class="text-gray-500 text-sm mt-1">Here is your investment progress summary.</p>
           </div>
           <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <div class="text-right hidden sm:block">
-              <p class="font-medium text-sm text-gray-900">{{Udetails.full_name}}</p>
-              <p class="text-gray-500 text-xs">{{Udetails.email}}</p>
+              <p class="font-medium text-sm text-gray-900">{{Udetails.name}}</p>
             </div>
             <img src="https://i.pravatar.cc/150?u=alex" 
                  alt="Profile"
