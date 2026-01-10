@@ -11,17 +11,18 @@ export async function getUserProfile() {
     }
 
     try {
-        const response = await fetch(
+        // Use POST because sending a JSON body with GET may be ignored by some servers
+    const response = await fetch(
             `${API_BASE_URL}/code/profile/getUserProfile.php`,
             {
-                method: "GET",
-                credentials: "include", 
+                method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body:JSON.stringify({
-                    userId: JSON.parse(localStorage.getItem("userData"))?.id
-                })
+                body: JSON.stringify({
+                    userId: JSON.parse(localStorage.getItem("userData"))?.id,
+                }),
             }
         );
 
