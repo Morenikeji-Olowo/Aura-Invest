@@ -622,6 +622,7 @@
 <script setup>
 import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
+const AI_BASE_URL = import.meta.env.VITE_AI_BASE_URL;
 
 const router = useRouter();
 // const goRegister = () => {
@@ -657,7 +658,7 @@ const sendMessage = async () => {
 
   try {
     // Call your Node AI backend
-    const response = await fetch("http://localhost:5000/api/chat", {
+    const response = await fetch(`${AI_BASE_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: messageToSend }),
