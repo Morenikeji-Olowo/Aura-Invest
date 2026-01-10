@@ -215,13 +215,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getUserProfile } from '../utils/getUserDetails'
 const Udetails = ref(null);
 
 onMounted(async () => {
   Udetails.value = await getUserProfile();
 });
+
 const isSaving = ref(false)
 const mobileMenuOpen = ref(false)
 
