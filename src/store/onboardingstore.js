@@ -18,7 +18,7 @@ export const onboardingStore = reactive({
       const userName = this.user.name || ''
       
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/code/onboarding/save.php`,
+        `${import.meta.env.VITE_API_BASE_URL}/code/onBoarding/save.php`,
         {
           method: "POST",
           credentials: "include",

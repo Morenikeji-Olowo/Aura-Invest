@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-4xl animate-fade-in text-center">
+  <div class="w-full p-2 max-w-4xl animate-fade-in text-center">
     <h1 class="text-5xl font-extrabold mb-4 tracking-tighter leading-tight text-[#0a1b2e]">
       What is your primary goal?
     </h1>

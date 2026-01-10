@@ -1,6 +1,6 @@
 vue
 <template>
-  <div class="w-full max-w-3xl">
+  <div class="w-full p-2 max-w-3xl">
     <h1 class="text-4xl font-bold mb-8 text-gray-900">
       What's your name and investment knowledge level?
     </h1>

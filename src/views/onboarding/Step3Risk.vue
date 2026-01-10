@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-3xl text-center">
+  <div class="w-full p-2 max-w-3xl text-center">
     <h1 class="text-4xl font-bold mb-3 text-gray-900">
       What's your risk comfort level?
     </h1>
