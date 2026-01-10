@@ -22,11 +22,11 @@
     <!--trying to make it flex-->
     <!-- Sidebar (hidden on mobile, shown on desktop) -->
     <aside :class="[
-      'bg-white border-r border-gray-100 flex flex-col shrink-0 transition-transform duration-300 ease-in-out h-screen fixed lg:static z-40',
+      'bg-white border-r border-gray-100 flex flex-col shrink-0 transition-transform duration-300 ease-in-out h-screen fixed lg:static z-40 overflow-y-auto',
       'w-64',
       mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]">
-      <div class="p-6">
+      <div class="p-4 lg:p-6">
         <div class="flex items-center justify-between lg:justify-start gap-2 text-[#800000] font-bold text-xl mb-8">
           <div class="flex items-center gap-2">
             <i class="fas fa-chart-pie"></i>
@@ -51,7 +51,7 @@
         </nav>
       </div>
 
-      <div class="mt-auto p-3 border-t border-gray-50 space-y-1">
+      <div class="mt-4 lg:mt-auto p-4 lg:p-6 border-t border-gray-50 space-y-1">
         <div class="flex items-center gap-3 text-gray-600 font-medium text-sm cursor-pointer hover:bg-gray-50 px-4 py-3 rounded-lg transition-all">
           <i class="fas fa-cog w-5 text-center text-sm"></i>
           <span class="truncate">Settings</span>
@@ -74,13 +74,13 @@
         <!-- Header -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div class="w-full">
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, Alex!</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, {{ Udetails.full_name }}</h1>
             <p class="text-gray-500 text-sm mt-1">Here is your investment progress summary.</p>
           </div>
           <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <div class="text-right hidden sm:block">
-              <p class="font-medium text-sm text-gray-900">Alex Doe</p>
-              <p class="text-gray-500 text-xs">alex.doe@email.com</p>
+              <p class="font-medium text-sm text-gray-900">{{Udetails.full_name}}</p>
+              <p class="text-gray-500 text-xs">{{Udetails.email}}</p>
             </div>
             <img src="https://i.pravatar.cc/150?u=alex" 
                  alt="Profile"
@@ -217,7 +217,8 @@
 
 <script setup>
 import { ref } from 'vue'
-
+import { getUserProfile } from '../utils/getUserDetails'
+const Udetails = getUserProfile()
 const isSaving = ref(false)
 const mobileMenuOpen = ref(false)
 
