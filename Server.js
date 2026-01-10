@@ -92,7 +92,7 @@ Before giving any plan, suggestion, or growth projection, you MUST include the f
 
 let conversationHistory = [];
 
-app.post("/api/chat", async (req, res) => {
+app.post("https://aura-invest.onrender.com/api/chat", async (req, res) => {
     try {
     const userMessage = req.body.message?.toString() ?? "";
 
