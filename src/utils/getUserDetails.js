@@ -12,7 +12,7 @@ export async function getUserProfile() {
 
     try {
         const response = await fetch(
-            `${API_BASE_URL}/profile/getUserProfile`,
+            `${API_BASE_URL}/profile/getUserProfile.php`,
             {
                 method: "GET",
                 credentials: "include", 
