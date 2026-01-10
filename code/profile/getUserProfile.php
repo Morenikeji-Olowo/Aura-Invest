@@ -9,9 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Credentials: true"); // 👈 allow cookies
 
 
-$userId;
-if (isset($_SESSION['userId'])) {
-    $data = json_decode(file_get_contents("php://input"), true);
+$data = json_decode(file_get_contents("php://input"), true);
 $userId = $data["userId"] ?? null;
 
     $sql = "SELECT * FROM user_onboarding WHERE user_id = ?";
@@ -33,13 +31,5 @@ $userId = $data["userId"] ?? null;
         ]);
         exit();
     }
-} else {
-    echo json_encode([
-        "success" => false,
-        "message" => "User not logged in."
-    ]);
-    exit();
-}
-exit();
 
 ?>
