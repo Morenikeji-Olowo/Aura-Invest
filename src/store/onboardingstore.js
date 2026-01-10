@@ -30,7 +30,8 @@ export const onboardingStore = reactive({
             knowledge: this.knowledge,
             riskLevel: this.riskLevel,
             goal: this.goal,
-            horizon: this.horizon
+            horizon: this.horizon,
+            userId: JSON.parse(localStorage.getItem("userData"))?.id
           }),
         }
       )
