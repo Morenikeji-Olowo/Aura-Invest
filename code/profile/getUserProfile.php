@@ -11,6 +11,7 @@ header("Access-Control-Allow-Credentials: true"); // 👈 allow cookies
 
 $userId;
 if (isset($_SESSION['userId'])) {
+    $data = json_decode(file_get_contents("php://input"), true);
 $userId = $data["userId"] ?? null;
 
     $sql = "SELECT * FROM user_onboarding WHERE user_id = ?";
