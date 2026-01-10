@@ -1,7 +1,7 @@
 <?php
 include '../../config/db.php';
 
-$frontend_origin = "https://aurainvestfront-p37upl8us-morenikeji-olowos-projects.vercel.app";
+$frontend_origin = "https://aurainvestfront.vercel.app";
 
 header("Access-Control-Allow-Origin: $frontend_origin");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
