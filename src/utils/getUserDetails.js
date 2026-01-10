@@ -19,6 +19,9 @@ export async function getUserProfile() {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body:JSON.stringify({
+                    userId: JSON.parse(localStorage.getItem("userData"))?.id
+                })
             }
         );
 
