@@ -217,7 +217,11 @@
 <script setup>
 import { ref } from 'vue'
 import { getUserProfile } from '../utils/getUserDetails'
-const Udetails = getUserProfile()
+const Udetails = ref(null);
+
+onMounted(async () => {
+  Udetails.value = await getUserProfile();
+});
 const isSaving = ref(false)
 const mobileMenuOpen = ref(false)
 
