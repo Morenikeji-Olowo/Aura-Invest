@@ -13,7 +13,7 @@ $userId;
 if (isset($_SESSION['userId'])) {
     $userId = $_SESSION['userId'];
 
-    $sql = "SELECT * FROM user_profile WHERE user_id = ?";
+    $sql = "SELECT * FROM user_onboarding WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
