@@ -141,7 +141,7 @@
                   </div>
                   <div class="flex items-center gap-2">
                     <button 
-                      @click="deleteStrategy(strategy.strategy_data.id)"
+                      @click="deleteStrategy(strategy.id)"
                       class="text-gray-400 hover:text-red-500 p-1"
                       title="Delete strategy"
                     >
