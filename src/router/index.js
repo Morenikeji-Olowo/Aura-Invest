@@ -17,7 +17,6 @@ import RecommendationPage from "../components/RecommendationPage.vue";
 
 const routes = [
   { path: "/register", component: AuthPage },
-  {path: "/recommend", component: RecommendationPage },
   { path: "/login", component: Signin },
   {
     path: "/dashboard",
@@ -28,6 +27,11 @@ const routes = [
     path: "/portfolio",
     component: protectedRoute,
     children: [{ path: "", component: Portfolio }],
+  },
+  {
+    path: "/recommend",
+    component: protectedRoute,
+    children: [{ path: "", component: RecommendationPage }],
   },
   {
     path: "/onboarding",
