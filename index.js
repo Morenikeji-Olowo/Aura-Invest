@@ -3,9 +3,6 @@ import dotenv from "dotenv";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import cors from "cors";
 
-
-
-
 dotenv.config();
 
 const app = express();
@@ -87,7 +84,9 @@ const data = JSON.parse(cleanText);
     recommendation: data
     });
 
-    } catch (error) {
+    }
+    // get errors
+    catch (error) {
     console.error(error);
     res.status(500).json({
     success: false,
