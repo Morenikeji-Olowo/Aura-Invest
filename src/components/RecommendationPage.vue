@@ -598,7 +598,7 @@
                             v-else
                             @click="saveStrategy(strategy)"
                             :class="[
-                              'w-full py-3 rounded-lg border transition-colors text-sm font-medium mt-2',
+                              'w-full py-3 rounded-lg border transition-colors text-sm font-medium mt-2 bg-white force-white-btn',
                               getStrategyButtonOutlineClass(
                                 strategy.risk_level
                               ),
@@ -1082,5 +1082,20 @@ onMounted(() => {
   height: 20px;
   background: #800000;
   border-radius: 50;
+}
+</style>
+
+<style scoped>
+/* Mobile button appearance fixes for iOS Safari */
+@media (max-width: 640px) {
+  button {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .force-white-btn {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
 }
 </style>

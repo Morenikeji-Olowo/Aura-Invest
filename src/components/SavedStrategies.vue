@@ -26,7 +26,7 @@
             <button 
               @click="refreshStrategies"
               :disabled="loading"
-              class="flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg border border-gray-300 hover:border-[#800000] hover:text-[#800000] transition-colors"
+              class="flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg border border-gray-300 hover:border-[#800000] hover:text-[#800000] transition-colors force-white-btn"
             >
               <i class="fas fa-redo" :class="{ 'fa-spin': loading }"></i>
               Refresh
@@ -192,7 +192,7 @@
                 <div class="flex justify-between items-center">
                   <button 
                     @click="viewStrategyDetails(strategy)"
-                    class="text-sm font-medium text-[#800000] hover:text-[#600000] flex items-center gap-1"
+                    class="text-sm font-medium text-[#800000] hover:text-[#600000] flex items-center gap-1 force-white-btn"
                   >
                     <i class="fas fa-eye"></i>
                     View Details
@@ -296,14 +296,14 @@
                   <div class="space-y-3">
                     <button 
                       @click="deleteStrategy(selectedStrategy.strategy_data.id)"
-                      class="w-full py-3 rounded-lg border border-red-300 text-red-600 font-medium hover:bg-red-50 transition-colors"
+                      class="w-full py-3 rounded-lg border border-red-300 text-red-600 font-medium hover:bg-red-50 transition-colors force-white-btn"
                     >
                       <i class="fas fa-trash mr-2"></i>
                       Delete Strategy
                     </button>
                     <button 
                       @click="selectedStrategy = null"
-                      class="w-full py-3 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                      class="w-full py-3 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors force-white-btn"
                     >
                       Close
                     </button>
@@ -541,7 +541,7 @@ onMounted(async () => {
 })
 </script>
 
-<style>
+<style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 /* Custom scrollbar for modal */
@@ -562,5 +562,19 @@ onMounted(async () => {
 .modal-content::-webkit-scrollbar-thumb {
   background: #800000;
   border-radius: 4px;
+}
+
+/* Mobile button appearance fixes for iOS Safari */
+@media (max-width: 640px) {
+  button {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Enforce white backgrounds for neutral buttons that might become dark in iOS */
+  .force-white-btn {
+    background-color: #ffffff !important;
+    color: #111827 !important; /* text-gray-900 */
+  }
 }
 </style>
