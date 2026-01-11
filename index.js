@@ -17,25 +17,27 @@ const model = genAI.getGenerativeModel({
 
 app.post("/api/recommend", async (req, res) => {
     try {
-    const {
-    age,
-    country,
-    income,
-    amount,
-    risk,
-    goal,
-    horizon,
-    experience
-    } = req.body;
+        const {
+            age,
+            country,
+            income,
+            amount,
+            risk,
+            goal,
+            horizon,
+            experience
+        } = req.body;
 
-    const prompt = `
+        // Updated prompt: AI returns 3 strategies in an array
+        const prompt = `
 You are an AI-powered investment education assistant.
 
 RULES:
-- You are not a licensed financial advisor.
-- Do not guarantee returns.
-- Do not mention specific stocks or cryptocurrencies.
-- Output educational recommendations only.
+- You are NOT a licensed financial advisor.
+- Do NOT guarantee returns.
+- Do NOT mention specific stocks or cryptocurrencies.
+- Output educational recommendations ONLY.
+- Return EXACTLY three investment strategies: Conservative, Balanced, Aggressive.
 
 USER PROFILE:
 Age: ${age}
@@ -48,53 +50,85 @@ Time Horizon: ${horizon} years
 Experience Level: ${experience}
 
 RESPONSE FORMAT:
-Return ONLY valid JSON in this structure:
+Return ONLY valid JSON with this structure:
 
 {
-"risk_profile_summary": "",
-"recommended_strategy": "",
-"suggested_asset_allocation": {
-"low_risk_assets_percent": "",
-"medium_risk_assets_percent": "",
-"high_risk_assets_percent": ""
-},
-"time_horizon_plan": "",
-"risk_management_tips": [
-    "",
-    "",
-    ""
-],
-"disclaimer": ""
+  "risk_profile_summary": "",
+  "investment_options": [
+    {
+      "id": "conservative",
+      "name": "Conservative",
+      "description": "",
+      "risk_level": "Low",
+      "asset_allocation": [
+        { "asset": "", "percentage": 0 },
+        { "asset": "", "percentage": 0 },
+        { "asset": "", "percentage": 0 }
+      ],
+      "suitable_for": "",
+      "recommended": true
+    },
+    {
+      "id": "balanced",
+      "name": "Balanced",
+      "description": "",
+      "risk_level": "Medium",
+      "asset_allocation": [
+        { "asset": "", "percentage": 0 },
+        { "asset": "", "percentage": 0 },
+        { "asset": "", "percentage": 0 }
+      ],
+      "suitable_for": "",
+      "recommended": false
+    },
+    {
+      "id": "aggressive",
+      "name": "Aggressive",
+      "description": "",
+      "risk_level": "High",
+      "asset_allocation": [
+        { "asset": "", "percentage": 0 },
+        { "asset": "", "percentage": 0 },
+        { "asset": "", "percentage": 0 }
+      ],
+      "suitable_for": "",
+      "recommended": false
+    }
+  ],
+  "ai_insights": [
+    { "title": "", "description": "" },
+    { "title": "", "description": "" }
+  ],
+  "recommended_strategy": "conservative",
+  "disclaimer": ""
 }
 `;
 
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
 
-    const cleanText = text
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
+        const cleanText = text
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
 
-const data = JSON.parse(cleanText);
+        const data = JSON.parse(cleanText);
 
+        res.json({
+            success: true,
+            recommendation: data
+        });
 
-    res.json({
-    success: true,
-    recommendation: data
-    });
-
-    }
-    // get errors
-    catch (error) {
-    console.error(error);
-    res.status(500).json({
-    success: false,
-    message: "AI generation failed"
-    });
+    } catch (error) {
+        console.error("AI Generation Error:", error);
+        res.status(500).json({
+            success: false,
+            message: "AI generation failed"
+        });
     }
 });
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server running on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
