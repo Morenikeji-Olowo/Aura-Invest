@@ -451,38 +451,6 @@ const latestDate = computed(() => {
   return formatDateShort(latest.created_at)
 })
 
-const filteredStrategies = computed(() => {
-  let filtered = [...savedStrategies.value]
-
-  // Apply search filter
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(strategy => 
-      strategy.strategy_name.toLowerCase().includes(query) ||
-      strategy.description.toLowerCase().includes(query) ||
-      strategy.risk_level.toLowerCase().includes(query)
-    )
-  }
-
-  // Apply active filter
-  if (activeFilter.value === 'recommended') {
-    filtered = filtered.filter(strategy => strategy.is_recommended)
-  }
-
-  return filtered
-})
-
-const totalPages = computed(() => {
-  return Math.ceil(filteredStrategies.value.length / itemsPerPage)
-})
-
-const paginatedStrategies = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
-  return filteredStrategies.value.slice(start, end)
-})
-
-// Helper functions
 const getRiskLevelClass = (riskLevel) => {
   const level = riskLevel.toLowerCase()
   if (level.includes('low') || level.includes('conservative')) {
