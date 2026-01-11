@@ -14,7 +14,7 @@
     />
 
     <!-- Main content area -->
-    <main class="min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden flex-1 lg:ml-64">
+    <main class="min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden flex-1">
       <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
         <!-- Header -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -595,7 +595,7 @@ const fetchSavedStrategies = async () => {
   try {
     const userData = JSON.parse(localStorage.getItem('userData') || '{}')
     
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/strategies/get.php`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/strategy/get-strategy.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -661,7 +661,7 @@ const deleteStrategy = async (strategyId) => {
   }
   
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/strategies/delete.php`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/strategy/delete-strategy.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

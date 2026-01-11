@@ -577,7 +577,6 @@
                             <strong>Who this is for:</strong>
                             {{ strategy.suitable_for }}
                           </p>
-                        <i class="fas fa-star mr-2"></i>Recommended Strategy
 
                           <button
                             v-if="strategy.recommended"
