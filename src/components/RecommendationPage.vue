@@ -577,14 +577,16 @@
                             <strong>Who this is for:</strong>
                             {{ strategy.suitable_for }}
                           </p>
+                        <i class="fas fa-star mr-2"></i>Recommended Strategy
+
                           <button
                             v-if="strategy.recommended"
+                             @click="saveStrategy(strategy)"
                             :class="[
                               'w-full py-3 rounded-lg text-white transition-colors text-sm font-medium mt-2',
                               getStrategyButtonColor(strategy.risk_level),
                             ]"
                           >
-                            <i class="fas fa-star mr-2"></i>Recommended Strategy
                           </button>
                           <button
                             v-else
@@ -977,6 +979,10 @@ const saveStrategy = async (strategy) => {
 
     if (data.success) {
       alert('Strategy saved successfully!')
+      setTimeout(() => {
+        resetForm()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, 400)
     } else {
       alert(data.message || 'Failed to save strategy.')
     }
