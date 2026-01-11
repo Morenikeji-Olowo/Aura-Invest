@@ -176,7 +176,6 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SideBar from './SideBar.vue'
 import { getUserProfile } from '../utils/getUserDetails'
-import SideBar from './SideBar.vue'
 
 const router = useRouter()
 const Udetails = ref(null)
