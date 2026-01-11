@@ -1,7 +1,6 @@
 <!-- Dashboard.vue (Updated) -->
 <template>
   <div class="min-h-screen bg-[#f8f9fa] font-['Inter'] lg:flex">
-    <!-- Reusable Sidebar Component -->
     <SideBar
       :nav-items="navItems"
       :mobile-menu-open="mobileMenuOpen"
@@ -14,7 +13,7 @@
     />
 
     <!-- Main content area -->
-    <main class="min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden flex-1 lg:ml-64">
+    <main class="min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden flex-1">
       <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
         <!-- Header -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -186,11 +185,10 @@ onMounted(async () => {
   Udetails.value = await getUserProfile()
 })
 
-// Navigation items
 const navItems = ref([
   { name: 'Dashboard', icon: 'fas fa-home', route: '/dashboard' },
   { name: 'Portfolio', icon: 'fas fa-chart-line', route: '/portfolio' },
-  { name: 'Transactions', icon: 'fas fa-exchange-alt', route: '/transactions' },
+  { name: 'Saved', icon: 'fas fa-exchange-alt', route: '/saved' },
   { name: 'Goals', icon: 'fas fa-bullseye', route: '/goals' },
   { name: 'Analytics', icon: 'fas fa-chart-bar', route: '/analytics' }
 ])

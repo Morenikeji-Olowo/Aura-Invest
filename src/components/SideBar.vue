@@ -1,7 +1,6 @@
 <!-- components/Sidebar.vue -->
 <template>
   <div>
-    <!-- Mobile header (only on mobile) -->
     <div v-if="showMobileHeader" class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2 text-[#800000] font-bold text-lg">

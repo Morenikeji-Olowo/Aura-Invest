@@ -587,6 +587,7 @@
                               getStrategyButtonColor(strategy.risk_level),
                             ]"
                           >
+                          Save this Recommended Strategy
                           </button>
                           <button
                             v-else

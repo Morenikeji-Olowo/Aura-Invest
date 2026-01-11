@@ -14,6 +14,7 @@ import test from "../components/test.vue";
 import Signin from "../components/Signin.vue";
 import LandingPage from "../views/LandingPage/LandingPage.vue";
 import RecommendationPage from "../components/RecommendationPage.vue";
+import SavedStrategies from "../components/SavedStrategies.vue";
 
 const routes = [
   { path: "/register", component: AuthPage },
@@ -28,6 +29,12 @@ const routes = [
     component: protectedRoute,
     children: [{ path: "", component: Portfolio }],
   },
+  {
+    path: "/saved",
+    component: protectedRoute,
+    children: [{ path: "", component:SavedStrategies}],
+  },
+
   {
     path: "/recommend",
     component: protectedRoute,
