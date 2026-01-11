@@ -483,9 +483,8 @@ const fetchSavedStrategies = async () => {
     const data = await response.json()
     
     if (data.success) {
-      // Your backend sends an array of strategy objects
-      // Each object has: id, name, risk_level, description, recommended, suitable_for, asset_allocation
       savedStrategies.value = data.strategies || []
+      console.log('Fetched strategies:', savedStrategies.value)
     } else {
       console.error('Failed to fetch strategies:', data.message)
     }
