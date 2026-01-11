@@ -318,12 +318,12 @@
             </div>
 
             <!-- Results state -->
-            <div v-else-if="showResults" class="space-y-6">
+            <div v-else-if="showResults && aiResponse" class="space-y-6">
               <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:p-8">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-4">
                   <div>
                     <h2 class="text-2xl font-bold text-gray-900 mb-2">Your AI Investment Plan</h2>
-                    <p class="text-gray-600">Personalized strategies based on your profile and goals</p>
+                    <p class="text-gray-600">{{ aiResponse.risk_profile_summary }}</p>
                   </div>
                   <button @click="showResults = false" 
                           class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:border-[#800000] hover:text-[#800000] transition-colors text-sm font-medium">
@@ -333,158 +333,74 @@
 
                 <!-- Strategy cards -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <!-- Conservative Strategy -->
-                  <transition appear @enter="enterAnimation" @leave="leaveAnimation" :css="false" :delay="0">
-                    <div class="strategy-card border-2 border-green-100 bg-gradient-to-br from-green-50 to-white hover:shadow-lg transition-all duration-300">
+                  <!-- Strategy cards -->
+                  <transition appear @enter="enterAnimation" @leave="leaveAnimation" :css="false" :delay="0"
+                              v-for="(strategy, index) in aiResponse.investment_options" :key="strategy.id">
+                    <div :class="[
+                      'strategy-card border-2 hover:shadow-lg transition-all duration-300',
+                      getStrategyColorClass(strategy.risk_level)
+                    ]">
                       <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-                            <i class="fas fa-shield-alt mr-2"></i>Conservative
+                          <span :class="[
+                            'inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold',
+                            getStrategyBadgeClass(strategy.risk_level)
+                          ]">
+                            <i :class="getStrategyIcon(strategy.risk_level)" class="mr-2"></i>
+                            {{ strategy.name }}
                           </span>
-                          <span class="text-2xl font-bold text-green-600">Low Risk</span>
+                          <span :class="[
+                            'text-2xl font-bold',
+                            getStrategyTextColor(strategy.risk_level)
+                          ]">
+                            {{ strategy.risk_level }} Risk
+                          </span>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-3">Stability & Growth</h3>
-                        <p class="text-gray-600 text-sm mb-6">Prioritizes capital preservation with steady, predictable returns. Ideal for risk-averse investors.</p>
+                        
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">{{ strategy.name }} Strategy</h3>
+                        <p class="text-gray-600 text-sm mb-6">{{ strategy.description }}</p>
                         
                         <!-- Asset allocation -->
                         <div class="mb-6">
                           <p class="text-sm font-medium text-gray-700 mb-3">Asset Allocation</p>
                           <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Bonds & Fixed Income</span>
-                              <span class="text-sm font-semibold text-green-700">60%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-green-500 h-2 rounded-full" style="width: 60%"></div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Blue-chip Stocks</span>
-                              <span class="text-sm font-semibold text-green-700">30%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-green-400 h-2 rounded-full" style="width: 30%"></div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Cash & Equivalents</span>
-                              <span class="text-sm font-semibold text-green-700">10%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-green-300 h-2 rounded-full" style="width: 10%"></div>
+                            <div v-for="(asset, assetIndex) in strategy.asset_allocation" :key="assetIndex"
+                                 class="space-y-1">
+                              <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-600">{{ asset.asset }}</span>
+                                <span :class="[
+                                  'text-sm font-semibold',
+                                  getStrategyTextColor(strategy.risk_level)
+                                ]">
+                                  {{ asset.percentage }}%
+                                </span>
+                              </div>
+                              <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div :class="[
+                                  'h-2 rounded-full',
+                                  getStrategyBarColor(strategy.risk_level, assetIndex)
+                                ]" :style="{ width: asset.percentage + '%' }"></div>
+                              </div>
                             </div>
                           </div>
                         </div>
                         
                         <div class="pt-4 border-t border-gray-100">
-                          <p class="text-xs text-gray-500 mb-2"><strong>Who this is for:</strong> First-time investors, retirees, or those saving for short-term goals.</p>
-                          <button class="w-full py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors text-sm font-medium mt-2">
-                            Select This Strategy <i class="fas fa-arrow-right ml-2"></i>
+                          <p class="text-xs text-gray-500 mb-2">
+                            <strong>Who this is for:</strong> {{ strategy.suitable_for }}
+                          </p>
+                          <button v-if="strategy.recommended"
+                                  :class="[
+                                    'w-full py-3 rounded-lg text-white transition-colors text-sm font-medium mt-2',
+                                    getStrategyButtonColor(strategy.risk_level)
+                                  ]">
+                            <i class="fas fa-star mr-2"></i>Recommended Strategy
                           </button>
-                        </div>
-                      </div>
-                    </div>
-                  </transition>
-
-                  <!-- Balanced Strategy -->
-                  <transition appear @enter="enterAnimation" @leave="leaveAnimation" :css="false" :delay="100">
-                    <div class="strategy-card border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-white hover:shadow-lg transition-all duration-300">
-                      <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
-                            <i class="fas fa-balance-scale mr-2"></i>Balanced
-                          </span>
-                          <span class="text-2xl font-bold text-blue-600">Medium Risk</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-3">Growth & Income</h3>
-                        <p class="text-gray-600 text-sm mb-6">Balances growth potential with risk management. Diversified across asset classes.</p>
-                        
-                        <!-- Asset allocation -->
-                        <div class="mb-6">
-                          <p class="text-sm font-medium text-gray-700 mb-3">Asset Allocation</p>
-                          <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Global Stocks</span>
-                              <span class="text-sm font-semibold text-blue-700">50%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-blue-500 h-2 rounded-full" style="width: 50%"></div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Bonds</span>
-                              <span class="text-sm font-semibold text-blue-700">40%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-blue-400 h-2 rounded-full" style="width: 40%"></div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Alternative Assets</span>
-                              <span class="text-sm font-semibold text-blue-700">10%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-blue-300 h-2 rounded-full" style="width: 10%"></div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div class="pt-4 border-t border-gray-100">
-                          <p class="text-xs text-gray-500 mb-2"><strong>Who this is for:</strong> Investors with medium-term goals and moderate risk tolerance.</p>
-                          <button class="w-full py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm font-medium mt-2">
-                            Select This Strategy <i class="fas fa-arrow-right ml-2"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </transition>
-
-                  <!-- Aggressive Strategy -->
-                  <transition appear @enter="enterAnimation" @leave="leaveAnimation" :css="false" :delay="200">
-                    <div class="strategy-card border-2 border-orange-100 bg-gradient-to-br from-orange-50 to-white hover:shadow-lg transition-all duration-300">
-                      <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-orange-100 text-orange-800">
-                            <i class="fas fa-chart-line mr-2"></i>Aggressive
-                          </span>
-                          <span class="text-2xl font-bold text-orange-600">High Risk</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-3">Maximum Growth</h3>
-                        <p class="text-gray-600 text-sm mb-6">Focuses on long-term capital appreciation with higher volatility tolerance.</p>
-                        
-                        <!-- Asset allocation -->
-                        <div class="mb-6">
-                          <p class="text-sm font-medium text-gray-700 mb-3">Asset Allocation</p>
-                          <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Growth Stocks</span>
-                              <span class="text-sm font-semibold text-orange-700">70%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-orange-500 h-2 rounded-full" style="width: 70%"></div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Tech & Innovation</span>
-                              <span class="text-sm font-semibold text-orange-700">20%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-orange-400 h-2 rounded-full" style="width: 20%"></div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                              <span class="text-xs text-gray-600">Emerging Markets</span>
-                              <span class="text-sm font-semibold text-orange-700">10%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                              <div class="bg-orange-300 h-2 rounded-full" style="width: 10%"></div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div class="pt-4 border-t border-gray-100">
-                          <p class="text-xs text-gray-500 mb-2"><strong>Who this is for:</strong> Experienced investors with long-term horizons and high risk tolerance.</p>
-                          <button class="w-full py-3 rounded-lg bg-orange-600 text-white hover:bg-orange-700 transition-colors text-sm font-medium mt-2">
+                          <button v-else
+                                  :class="[
+                                    'w-full py-3 rounded-lg border transition-colors text-sm font-medium mt-2',
+                                    getStrategyButtonOutlineClass(strategy.risk_level)
+                                  ]">
                             Select This Strategy <i class="fas fa-arrow-right ml-2"></i>
                           </button>
                         </div>
@@ -494,21 +410,24 @@
                 </div>
               </div>
 
-              <!-- Additional insights -->
-              <div class="bg-gradient-to-r from-[#800000]/5 to-[#800000]/10 rounded-2xl p-6 lg:p-8">
+              <!-- AI Insights -->
+              <div v-if="aiResponse.ai_insights && aiResponse.ai_insights.length > 0"
+                   class="bg-gradient-to-r from-[#800000]/5 to-[#800000]/10 rounded-2xl p-6 lg:p-8">
                 <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <i class="fas fa-lightbulb text-[#800000]"></i>AI Insights for Your Profile
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
-                    <p class="text-sm font-medium text-gray-900 mb-2">💡 Based on your age and time horizon</p>
-                    <p class="text-xs text-gray-600">You have sufficient time to recover from market fluctuations, allowing for more growth-oriented investments.</p>
-                  </div>
-                  <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
-                    <p class="text-sm font-medium text-gray-900 mb-2">📊 Risk assessment</p>
-                    <p class="text-xs text-gray-600">Your selected risk tolerance aligns well with your investment goals and experience level.</p>
+                  <div v-for="(insight, index) in aiResponse.ai_insights" :key="index"
+                       class="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
+                    <p class="text-sm font-medium text-gray-900 mb-2">{{ insight.icon || '💡' }} {{ insight.title }}</p>
+                    <p class="text-xs text-gray-600">{{ insight.description }}</p>
                   </div>
                 </div>
+              </div>
+
+              <!-- Disclaimer -->
+              <div v-if="aiResponse.disclaimer" class="text-center text-gray-500 text-xs p-4 bg-white/50 rounded-xl">
+                <p>{{ aiResponse.disclaimer }}</p>
               </div>
             </div>
 
@@ -559,8 +478,9 @@ const currentStep = ref(1)
 const totalSteps = 3
 const loading = ref(false)
 const showResults = ref(false)
+const aiResponse = ref(null)
 
-// Form data
+// Form data - matches exactly what backend expects
 const form = ref({
   age: null,
   country: '',
@@ -623,6 +543,95 @@ const isFormComplete = computed(() => {
   return Object.values(form.value).every(val => val !== null && val !== '')
 })
 
+// Helper functions for strategy styling
+const getStrategyColorClass = (riskLevel) => {
+  const level = riskLevel.toLowerCase()
+  if (level.includes('low') || level.includes('conservative')) {
+    return 'border-green-100 bg-gradient-to-br from-green-50 to-white'
+  } else if (level.includes('medium') || level.includes('balanced')) {
+    return 'border-blue-100 bg-gradient-to-br from-blue-50 to-white'
+  } else if (level.includes('high') || level.includes('aggressive')) {
+    return 'border-orange-100 bg-gradient-to-br from-orange-50 to-white'
+  }
+  return 'border-gray-100 bg-gradient-to-br from-gray-50 to-white'
+}
+
+const getStrategyBadgeClass = (riskLevel) => {
+  const level = riskLevel.toLowerCase()
+  if (level.includes('low') || level.includes('conservative')) {
+    return 'bg-green-100 text-green-800'
+  } else if (level.includes('medium') || level.includes('balanced')) {
+    return 'bg-blue-100 text-blue-800'
+  } else if (level.includes('high') || level.includes('aggressive')) {
+    return 'bg-orange-100 text-orange-800'
+  }
+  return 'bg-gray-100 text-gray-800'
+}
+
+const getStrategyIcon = (riskLevel) => {
+  const level = riskLevel.toLowerCase()
+  if (level.includes('low') || level.includes('conservative')) {
+    return 'fas fa-shield-alt'
+  } else if (level.includes('medium') || level.includes('balanced')) {
+    return 'fas fa-balance-scale'
+  } else if (level.includes('high') || level.includes('aggressive')) {
+    return 'fas fa-chart-line'
+  }
+  return 'fas fa-chart-pie'
+}
+
+const getStrategyTextColor = (riskLevel) => {
+  const level = riskLevel.toLowerCase()
+  if (level.includes('low') || level.includes('conservative')) {
+    return 'text-green-600'
+  } else if (level.includes('medium') || level.includes('balanced')) {
+    return 'text-blue-600'
+  } else if (level.includes('high') || level.includes('aggressive')) {
+    return 'text-orange-600'
+  }
+  return 'text-gray-600'
+}
+
+const getStrategyBarColor = (riskLevel, assetIndex) => {
+  const level = riskLevel.toLowerCase()
+  if (level.includes('low') || level.includes('conservative')) {
+    const shades = ['bg-green-500', 'bg-green-400', 'bg-green-300', 'bg-green-200']
+    return shades[assetIndex % shades.length] || 'bg-green-400'
+  } else if (level.includes('medium') || level.includes('balanced')) {
+    const shades = ['bg-blue-500', 'bg-blue-400', 'bg-blue-300', 'bg-blue-200']
+    return shades[assetIndex % shades.length] || 'bg-blue-400'
+  } else if (level.includes('high') || level.includes('aggressive')) {
+    const shades = ['bg-orange-500', 'bg-orange-400', 'bg-orange-300', 'bg-orange-200']
+    return shades[assetIndex % shades.length] || 'bg-orange-400'
+  }
+  const shades = ['bg-gray-500', 'bg-gray-400', 'bg-gray-300', 'bg-gray-200']
+  return shades[assetIndex % shades.length] || 'bg-gray-400'
+}
+
+const getStrategyButtonColor = (riskLevel) => {
+  const level = riskLevel.toLowerCase()
+  if (level.includes('low') || level.includes('conservative')) {
+    return 'bg-green-600 hover:bg-green-700'
+  } else if (level.includes('medium') || level.includes('balanced')) {
+    return 'bg-blue-600 hover:bg-blue-700'
+  } else if (level.includes('high') || level.includes('aggressive')) {
+    return 'bg-orange-600 hover:bg-orange-700'
+  }
+  return 'bg-[#800000] hover:bg-[#600000]'
+}
+
+const getStrategyButtonOutlineClass = (riskLevel) => {
+  const level = riskLevel.toLowerCase()
+  if (level.includes('low') || level.includes('conservative')) {
+    return 'border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400'
+  } else if (level.includes('medium') || level.includes('balanced')) {
+    return 'border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400'
+  } else if (level.includes('high') || level.includes('aggressive')) {
+    return 'border-orange-300 text-orange-600 hover:bg-orange-50 hover:border-orange-400'
+  }
+  return 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400'
+}
+
 // Methods
 const nextStep = () => {
   if (currentStep.value < totalSteps) {
@@ -649,23 +658,45 @@ const resetForm = () => {
   }
   currentStep.value = 1
   showResults.value = false
+  aiResponse.value = null
 }
 
 const getRecommendations = async () => {
   loading.value = true
   
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 2000))
-  
-  loading.value = false
-  showResults.value = true
-  
-  // Scroll to results on mobile
-  if (window.innerWidth < 1024) {
-    const resultsSection = document.querySelector('.lg\\:col-span-7, .lg\\:col-span-12')
-    if (resultsSection) {
-      resultsSection.scrollIntoView({ behavior: 'smooth' })
+  try {
+    const response = await fetch(`${import.meta.env.VITE_AI_RECOMMEND_API}/api/recommend`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form.value)
+    })
+    
+    const data = await response.json()
+    
+    if (data.success || data.investment_options) {
+      // Store the AI response
+      aiResponse.value = data
+      showResults.value = true
+      
+      // Scroll to results on mobile
+      if (window.innerWidth < 1024) {
+        const resultsSection = document.querySelector('.lg\\:col-span-7, .lg\\:col-span-12')
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+    } else {
+      // Handle errors
+      alert(data.message || 'Failed to get recommendations. Please try again.')
     }
+    
+  } catch (error) {
+    console.error('Error fetching recommendations:', error)
+    alert('Failed to get AI recommendations. Please try again.')
+  } finally {
+    loading.value = false
   }
 }
 
@@ -717,5 +748,26 @@ onMounted(() => {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
+  background: linear-gradient(to right, #800000 0%, #800000 50%, #e5e7eb 50%, #e5e7eb 100%);
+  border-radius: 3px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #800000;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #800000;
+  border-radius: 50
 }
 </style>

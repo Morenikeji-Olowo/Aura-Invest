@@ -76,8 +76,20 @@
           <div class="w-full">
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, {{ Udetails.name }}</h1>
             <p class="text-gray-500 text-sm mt-1">Here is your investment progress summary.</p>
+
+            <!-- Mobile CTA: Let AI Recommend (visible only on small screens) -->
+            <div class="mt-3 sm:hidden">
+              <router-link to="/recommend" class="w-full block bg-[#800000] text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-[#600000] transition-all text-center">
+                Let AI Recommend
+              </router-link>
+            </div>
           </div>
           <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <!-- Desktop CTA: Let AI Recommend (hidden on small screens) -->
+            <router-link to="/recommend" class="hidden sm:inline-flex bg-[#800000] text-white px-3 py-2 rounded-lg font-medium text-sm hover:bg-[#600000] transition-all">
+              Let AI Recommend
+            </router-link>
+
             <div class="text-right hidden sm:block">
               <p class="font-medium text-sm text-gray-900">{{Udetails.name}}</p>
             </div>
