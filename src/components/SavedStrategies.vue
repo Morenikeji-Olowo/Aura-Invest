@@ -134,7 +134,7 @@
                       <i :class="getRiskLevelClass(strategy.risk_level).icon" class="mr-1"></i>
                       {{ strategy.risk_level }}
                     </span>
-                    <span v-if="strategy.is_recommended" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                    <span v-if="strategy.recommended" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
                       <i class="fas fa-star mr-1 text-xs"></i>
                       Recommended
                     </span>
@@ -149,9 +149,9 @@
                     </button>
                   </div>
                 </div>
-                <h3 class="font-bold text-gray-900 text-lg">{{ strategy.strategy_name }}</h3>
+                <h3 class="font-bold text-gray-900 text-lg">{{ strategy.name }}</h3>
                 <p class="text-gray-600 text-xs mt-1">
-                  Saved {{ formatDate(strategy.created_at) }}
+                  {{ formatStrategyType(strategy.id) }}
                 </p>
               </div>
 
@@ -180,27 +180,10 @@
                   </div>
                 </div>
 
-                <!-- Form Data Summary -->
-                <div v-if="strategy.form_data" class="mb-4 p-3 bg-gray-50 rounded-lg">
-                  <p class="text-xs font-medium text-gray-900 mb-2">Based on your profile:</p>
-                  <div class="grid grid-cols-2 gap-2">
-                    <div class="text-xs">
-                      <span class="text-gray-500">Amount:</span>
-                      <span class="font-medium text-gray-900 ml-1">${{ formatAmount(strategy.form_data) }}</span>
-                    </div>
-                    <div class="text-xs">
-                      <span class="text-gray-500">Goal:</span>
-                      <span class="font-medium text-gray-900 ml-1">{{ formatGoal(strategy.form_data) }}</span>
-                    </div>
-                    <div class="text-xs">
-                      <span class="text-gray-500">Risk:</span>
-                      <span class="font-medium text-gray-900 ml-1">{{ formatRisk(strategy.form_data) }}/10</span>
-                    </div>
-                    <div class="text-xs">
-                      <span class="text-gray-500">Experience:</span>
-                      <span class="font-medium text-gray-900 ml-1">{{ formatExperience(strategy.form_data) }}</span>
-                    </div>
-                  </div>
+                <!-- Suitable For -->
+                <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                  <p class="text-xs font-medium text-gray-900 mb-2">Who this is for:</p>
+                  <p class="text-xs text-gray-600">{{ strategy.suitable_for }}</p>
                 </div>
               </div>
 
@@ -235,8 +218,8 @@
             <!-- Modal Header -->
             <div class="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div>
-                <h2 class="text-xl font-bold text-gray-900">{{ selectedStrategy.strategy_name }}</h2>
-                <p class="text-gray-600 text-sm">Saved {{ formatDate(selectedStrategy.created_at) }}</p>
+                <h2 class="text-xl font-bold text-gray-900">{{ selectedStrategy.name }}</h2>
+                <p class="text-gray-600 text-sm">{{ formatStrategyType(selectedStrategy.id) }} • {{ selectedStrategy.risk_level }} Risk</p>
               </div>
               <button @click="selectedStrategy = null" class="text-gray-400 hover:text-gray-600 p-2">
                 <i class="fas fa-times text-xl"></i>
@@ -256,9 +239,9 @@
 
                   <!-- Asset Allocation Details -->
                   <div class="bg-white p-4 rounded-xl border border-gray-200">
-                    <h3 class="font-bold text-gray-900 mb-4">Detailed Asset Allocation</h3>
+                    <h3 class="font-bold text-gray-900 mb-4">Asset Allocation</h3>
                     <div class="space-y-4">
-                      <div v-for="(asset, index) in getAssetAllocation(selectedStrategy)" 
+                      <div v-for="(asset, index) in selectedStrategy.asset_allocation" 
                            :key="index"
                            class="space-y-2">
                         <div class="flex justify-between items-center">
@@ -287,43 +270,26 @@
                     <h3 class="font-bold text-gray-900 mb-4">Strategy Information</h3>
                     <div class="space-y-3">
                       <div>
+                        <p class="text-xs text-gray-500">Strategy Type</p>
+                        <p class="font-medium text-gray-900">{{ formatStrategyType(selectedStrategy.id) }}</p>
+                      </div>
+                      <div>
                         <p class="text-xs text-gray-500">Risk Level</p>
                         <p class="font-medium text-gray-900">{{ selectedStrategy.risk_level }}</p>
                       </div>
                       <div>
-                        <p class="text-xs text-gray-500">Suitable For</p>
-                        <p class="font-medium text-gray-900">{{ selectedStrategy.suitable_for }}</p>
-                      </div>
-                      <div>
                         <p class="text-xs text-gray-500">AI Recommended</p>
-                        <p class="font-medium" :class="selectedStrategy.is_recommended ? 'text-green-600' : 'text-gray-900'">
-                          {{ selectedStrategy.is_recommended ? 'Yes' : 'No' }}
+                        <p class="font-medium" :class="selectedStrategy.recommended ? 'text-green-600' : 'text-gray-900'">
+                          {{ selectedStrategy.recommended ? 'Yes' : 'No' }}
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Original Form Data -->
-                  <div v-if="selectedStrategy.form_data" class="bg-white p-4 rounded-xl border border-gray-200">
-                    <h3 class="font-bold text-gray-900 mb-4">Original Profile</h3>
-                    <div class="space-y-2">
-                      <div class="flex justify-between">
-                        <span class="text-xs text-gray-600">Investment Amount:</span>
-                        <span class="text-xs font-medium text-gray-900">${{ formatAmount(selectedStrategy.form_data) }}</span>
-                      </div>
-                      <div class="flex justify-between">
-                        <span class="text-xs text-gray-600">Investment Goal:</span>
-                        <span class="text-xs font-medium text-gray-900">{{ formatGoal(selectedStrategy.form_data) }}</span>
-                      </div>
-                      <div class="flex justify-between">
-                        <span class="text-xs text-gray-600">Risk Tolerance:</span>
-                        <span class="text-xs font-medium text-gray-900">{{ formatRisk(selectedStrategy.form_data) }}/10</span>
-                      </div>
-                      <div class="flex justify-between">
-                        <span class="text-xs text-gray-600">Time Horizon:</span>
-                        <span class="text-xs font-medium text-gray-900">{{ formatTimeHorizon(selectedStrategy.form_data) }}</span>
-                      </div>
-                    </div>
+                  <!-- Suitable For -->
+                  <div class="bg-white p-4 rounded-xl border border-gray-200">
+                    <h3 class="font-bold text-gray-900 mb-4">Who This Is For</h3>
+                    <p class="text-gray-700 text-sm">{{ selectedStrategy.suitable_for }}</p>
                   </div>
 
                   <!-- Action Buttons -->
@@ -390,15 +356,12 @@ const navItems = ref([
 
 // Computed properties
 const recommendedCount = computed(() => {
-  return savedStrategies.value.filter(s => s.is_recommended).length
+  return savedStrategies.value.filter(s => s.recommended).length
 })
 
 const latestDate = computed(() => {
-  if (savedStrategies.value.length === 0) return 'N/A'
-  const latest = savedStrategies.value.reduce((latest, current) => {
-    return new Date(current.created_at) > new Date(latest.created_at) ? current : latest
-  })
-  return formatDateShort(latest.created_at)
+  // Since your backend doesn't send dates, we'll show count instead
+  return savedStrategies.value.length > 0 ? `${savedStrategies.value.length} saved` : 'No strategies'
 })
 
 // Helper functions
@@ -443,124 +406,32 @@ const getRiskLevelClass = (riskLevel) => {
 }
 
 const getAssetAllocationPreview = (allocation) => {
-  try {
-    if (typeof allocation === 'string') {
-      const assets = JSON.parse(allocation || '[]')
-      return assets.slice(0, 3)
-    }
-    return []
-  } catch (error) {
-    console.error('Error parsing asset allocation:', error)
-    return []
-  }
-}
-
-const getAssetAllocation = (strategy) => {
-  try {
-    if (strategy.asset_allocation) {
-      return JSON.parse(strategy.asset_allocation)
-    }
-    return []
-  } catch (error) {
-    console.error('Error parsing asset allocation:', error)
-    return []
-  }
+  if (!allocation || !Array.isArray(allocation)) return []
+  return allocation.slice(0, 3) // Show first 3 assets
 }
 
 const getAssetDescription = (asset) => {
   const descriptions = {
-    'Bonds & Fixed Income': 'Low-risk, stable returns',
-    'Blue-chip Stocks': 'Established, dividend-paying companies',
-    'Global Stocks': 'Diversified international exposure',
-    'Growth Stocks': 'High-growth potential companies',
-    'Tech & Innovation': 'Technology and innovative sectors',
-    'Emerging Markets': 'High-growth developing markets'
+    'Government Bonds': 'Low-risk government-issued bonds',
+    'Investment Grade Corporate Bonds': 'High-quality corporate bonds',
+    'Money Market Instruments': 'Short-term, highly liquid instruments',
+    'High-Yield Bonds': 'Higher risk corporate bonds with better returns',
+    'Dividend Stocks': 'Stable companies that pay regular dividends',
+    'International Equities': 'Diversified global stock investments',
+    'Technology Stocks': 'Growth-focused technology companies',
+    'Small-Cap Stocks': 'Smaller companies with growth potential',
+    'Alternative Investments': 'Diversified alternative assets'
   }
   return descriptions[asset] || 'Investment asset'
 }
 
-const formatDate = (dateString) => {
-  try {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    })
-  } catch (error) {
-    return 'Unknown date'
+const formatStrategyType = (strategyId) => {
+  const types = {
+    'conservative': 'Conservative Strategy',
+    'balanced': 'Balanced Strategy',
+    'aggressive': 'Aggressive Strategy'
   }
-}
-
-const formatDateShort = (dateString) => {
-  try {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    })
-  } catch (error) {
-    return 'Unknown'
-  }
-}
-
-const formatAmount = (formData) => {
-  try {
-    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
-    return data?.amount?.toLocaleString() || 'N/A'
-  } catch (error) {
-    return 'N/A'
-  }
-}
-
-const formatGoal = (formData) => {
-  try {
-    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
-    const goals = {
-      'retirement': 'Retirement',
-      'growth': 'Wealth Growth',
-      'education': 'Education',
-      'home': 'Home Purchase',
-      'emergency': 'Emergency Fund',
-      'other': 'Other'
-    }
-    return goals[data?.goal] || data?.goal || 'N/A'
-  } catch (error) {
-    return 'N/A'
-  }
-}
-
-const formatRisk = (formData) => {
-  try {
-    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
-    return data?.riskTolerance || 'N/A'
-  } catch (error) {
-    return 'N/A'
-  }
-}
-
-const formatExperience = (formData) => {
-  try {
-    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
-    return data?.experience ? data.experience.charAt(0).toUpperCase() + data.experience.slice(1) : 'N/A'
-  } catch (error) {
-    return 'N/A'
-  }
-}
-
-const formatTimeHorizon = (formData) => {
-  try {
-    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
-    const horizons = {
-      'short': 'Short-term (< 3 years)',
-      'medium': 'Medium-term (3-7 years)',
-      'long': 'Long-term (> 7 years)'
-    }
-    return horizons[data?.timeHorizon] || data?.timeHorizon || 'N/A'
-  } catch (error) {
-    return 'N/A'
-  }
+  return types[strategyId] || 'Investment Strategy'
 }
 
 // Methods
@@ -612,6 +483,8 @@ const fetchSavedStrategies = async () => {
     const data = await response.json()
     
     if (data.success) {
+      // Your backend sends an array of strategy objects
+      // Each object has: id, name, risk_level, description, recommended, suitable_for, asset_allocation
       savedStrategies.value = data.strategies || []
     } else {
       console.error('Failed to fetch strategies:', data.message)
@@ -632,8 +505,9 @@ const viewStrategyDetails = (strategy) => {
 }
 
 const applyStrategy = async (strategy) => {
-  if (confirm(`Apply "${strategy.strategy_name}" strategy to your portfolio?`)) {
+  if (confirm(`Apply "${strategy.name}" strategy to your portfolio?`)) {
     try {
+      // You'll need to create this endpoint if you want to apply strategies
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/strategies/apply.php`, {
         method: 'POST',
         headers: {
@@ -641,6 +515,7 @@ const applyStrategy = async (strategy) => {
         },
         body: JSON.stringify({
           strategy_id: strategy.id,
+          strategy_name: strategy.name,
           user_id: Udetails.value?.id
         })
       })
