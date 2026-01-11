@@ -197,7 +197,7 @@
                     <i class="fas fa-eye"></i>
                     View Details
                   </button>
-                  <button 
+                  <!-- <button 
                     @click="applyStrategy(strategy)"
                     :class="[
                       'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
@@ -205,7 +205,7 @@
                     ]"
                   >
                     Apply
-                  </button>
+                  </button> -->
                 </div>
               </div>
             </div>
@@ -294,16 +294,6 @@
 
                   <!-- Action Buttons -->
                   <div class="space-y-3">
-                    <button 
-                      @click="applyStrategy(selectedStrategy)"
-                      :class="[
-                        'w-full py-3 rounded-lg text-white font-medium transition-colors',
-                        getRiskLevelClass(selectedStrategy.strategy_data.risk_level).button
-                      ]"
-                    >
-                      <i class="fas fa-check-circle mr-2"></i>
-                      Apply This Strategy
-                    </button>
                     <button 
                       @click="deleteStrategy(selectedStrategy.strategy_data.id)"
                       class="w-full py-3 rounded-lg border border-red-300 text-red-600 font-medium hover:bg-red-50 transition-colors"
@@ -503,35 +493,7 @@ const viewStrategyDetails = (strategy) => {
   selectedStrategy.value = strategy
 }
 
-const applyStrategy = async (strategy) => {
-  if (confirm(`Apply "${strategy.name}" strategy to your portfolio?`)) {
-    try {
-      // You'll need to create this endpoint if you want to apply strategies
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/strategies/apply.php`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          strategy_id: strategy.id,
-          strategy_name: strategy.name,
-          user_id: Udetails.value?.id
-        })
-      })
-      
-      const data = await response.json()
-      
-      if (data.success) {
-        alert('Strategy applied successfully!')
-      } else {
-        alert(data.message || 'Failed to apply strategy')
-      }
-    } catch (error) {
-      console.error('Error applying strategy:', error)
-      alert('Failed to apply strategy. Please try again.')
-    }
-  }
-}
+
 
 const deleteStrategy = async (strategyId) => {
   if (!confirm('Are you sure you want to delete this strategy? This action cannot be undone.')) {
@@ -546,7 +508,7 @@ const deleteStrategy = async (strategyId) => {
       },
       body: JSON.stringify({
         strategy_id: strategyId,
-        user_id: Udetails.value?.id
+        user_id: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).id : null
       }),
       credentials: 'include',
     })
