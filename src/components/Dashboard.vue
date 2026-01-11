@@ -1,75 +1,20 @@
+<!-- Dashboard.vue (Updated) -->
 <template>
   <div class="min-h-screen bg-[#f8f9fa] font-['Inter'] lg:flex">
-    <!-- Mobile header (only on mobile) -->
-    <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2 text-[#800000] font-bold text-lg">
-          <i class="fas fa-chart-pie"></i>
-          <span class="truncate">Aura Invest</span>
-        </div>
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 hover:bg-gray-50 rounded-lg">
-          <i :class="mobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'" class="text-gray-600 text-lg"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile menu overlayy -->
-    <div v-if="mobileMenuOpen" 
-         @click="mobileMenuOpen = false"
-         class="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50 transition-all duration-300">
-    </div>
-
-    <!--trying to make it flex-->
-    <!-- Sidebar (hidden on mobile, shown on desktop) -->
-    <aside :class="[
-      'bg-white border-r border-gray-100 flex flex-col shrink-0 transition-transform duration-300 ease-in-out h-screen fixed lg:static z-40 overflow-y-auto',
-      'w-64',
-      mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-    ]">
-      <div class="p-4 lg:p-6">
-        <div class="flex items-center justify-between lg:justify-start gap-2 text-[#800000] font-bold text-xl mb-8">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-chart-pie"></i>
-            <span>Aura-Invest</span>
-          </div>
-          <button @click="mobileMenuOpen = false" class="lg:hidden p-2 hover:bg-gray-50 rounded-lg">
-            <i class="fas fa-times text-gray-600"></i>
-          </button>
-        </div>
-
-        <nav class="space-y-1">
-          <div v-for="item in navItems" :key="item.name" 
-            @click="mobileMenuOpen = false"
-            :class="[
-              'flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all font-medium text-sm',
-              item.active ? 'bg-[#800000]/10 text-[#800000]' : 'text-gray-600 hover:bg-gray-50'
-            ]"
-          >
-            <i :class="item.icon" class="w-5 text-center text-sm"></i>
-            <span class="truncate">{{ item.name }}</span>
-          </div>
-        </nav>
-      </div>
-
-      <div class="mt-4 lg:mt-auto p-4 lg:p-6 border-t border-gray-50 space-y-1">
-        <div class="flex items-center gap-3 text-gray-600 font-medium text-sm cursor-pointer hover:bg-gray-50 px-4 py-3 rounded-lg transition-all">
-          <i class="fas fa-cog w-5 text-center text-sm"></i>
-          <span class="truncate">Settings</span>
-        </div>
-
-        <button 
-          @click="logout"
-          :disabled="isSaving"
-          class="flex items-center gap-3 text-gray-600 font-medium text-sm cursor-pointer hover:bg-gray-50 disabled:opacity-50 w-full px-4 py-3 rounded-lg transition-all text-left"
-        >
-          <i class="fas fa-sign-out-alt w-5 text-center text-sm"></i>
-          <span class="truncate">Logout</span>
-        </button>
-      </div>
-    </aside>
+    <!-- Reusable Sidebar Component -->
+    <Sidebar
+      :nav-items="navItems"
+      :mobile-menu-open="mobileMenuOpen"
+      :is-saving="isSaving"
+      :active-nav-name="'Dashboard'"
+      @toggle-mobile-menu="mobileMenuOpen = !mobileMenuOpen"
+      @nav-click="handleNavClick"
+      @settings-click="handleSettingsClick"
+      @logout="logout"
+    />
 
     <!-- Main content area -->
-    <main class="min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden flex-1">
+    <main class="min-h-screen bg-[#f8f9fa] transition-all duration-300 overflow-x-hidden flex-1 lg:ml-64">
       <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
         <!-- Header -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -228,24 +173,27 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import Sidebar from '@/components/Sidebar.vue'
 import { getUserProfile } from '../utils/getUserDetails'
-const Udetails = ref(null);
 
-onMounted(async () => {
-  Udetails.value = await getUserProfile();
-});
-
+const router = useRouter()
+const Udetails = ref(null)
 const isSaving = ref(false)
 const mobileMenuOpen = ref(false)
 
+onMounted(async () => {
+  Udetails.value = await getUserProfile()
+})
+
 // Navigation items
-const navItems = [
-  { name: 'Dashboard', icon: 'fas fa-home', active: true },
-  { name: 'Portfolio', icon: 'fas fa-chart-line', active: false },
-  { name: 'Transactions', icon: 'fas fa-exchange-alt', active: false },
-  { name: 'Goals', icon: 'fas fa-bullseye', active: false },
-  { name: 'Analytics', icon: 'fas fa-chart-bar', active: false }
-]
+const navItems = ref([
+  { name: 'Dashboard', icon: 'fas fa-home', route: '/dashboard' },
+  { name: 'Portfolio', icon: 'fas fa-chart-line', route: '/portfolio' },
+  { name: 'Transactions', icon: 'fas fa-exchange-alt', route: '/transactions' },
+  { name: 'Goals', icon: 'fas fa-bullseye', route: '/goals' },
+  { name: 'Analytics', icon: 'fas fa-chart-bar', route: '/analytics' }
+])
 
 // Goals data
 const goals = [
@@ -261,33 +209,43 @@ const insights = [
   { title: 'Performance Forecast', desc: 'Projected 5% growth in the next year.' }
 ]
 
+// Navigation click handler
+const handleNavClick = (item) => {
+  if (item.route) {
+    router.push(item.route)
+  }
+}
+
+// Settings click handler
+const handleSettingsClick = () => {
+  router.push('/settings')
+}
+
 const logout = async () => {  
   isSaving.value = true
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/auth/logout.php`, {
       method: 'POST',
       credentials: 'include',
-    });
+    })
 
     if (response.ok) {
-      console.log('Logout successful');
-      localStorage.clear();
-      window.location.reload();
+      console.log('Logout successful')
+      localStorage.clear()
+      window.location.reload()
     } else {
-      console.error('Logout failed');
+      console.error('Logout failed')
     }
   } catch (error) {
-    console.error('Error during logout:', error);
+    console.error('Error during logout:', error)
   } finally {
     isSaving.value = false
   }
 }
 </script>
-
 <style>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
-/* Mobile-specific optimizations */
 @media (max-width: 640px) {
   .sm\:grid-cols-3 {
     grid-template-columns: 1fr;
@@ -298,7 +256,7 @@ const logout = async () => {
   }
   
   .xl\:col-span-3 {
-    grid-template-columns: 1fr;
+    grid-column: span 1;
   }
 }
 </style>
