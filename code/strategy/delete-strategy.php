@@ -15,7 +15,7 @@ $strategy_id = $data["strategy_id"] ?? null;
 
 try {
     $stmt = $conn->prepare("DELETE FROM user_strategies WHERE user_id = ? AND strategy_id = ?");
-    $stmt->bind_param("is", $userId, $strategyId);
+    $stmt->bind_param("is", $userId, $strategy_id);
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
