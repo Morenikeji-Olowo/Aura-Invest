@@ -123,25 +123,25 @@
               <!-- Strategy Header -->
               <div :class="[
                 'p-4 border-b',
-                getRiskLevelClass(strategy.risk_level).border
+                getRiskLevelClass(strategy.strategy_data.risk_level).border
               ]">
                 <div class="flex items-center justify-between mb-2">
                   <div class="flex items-center gap-2">
                     <span :class="[
                       'inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold',
-                      getRiskLevelClass(strategy.risk_level).badge
+                      getRiskLevelClass(strategy.strategy_data.risk_level).badge
                     ]">
-                      <i :class="getRiskLevelClass(strategy.risk_level).icon" class="mr-1"></i>
-                      {{ strategy.risk_level }}
+                      <i :class="getRiskLevelClass(strategy.strategy_data.risk_level).icon" class="mr-1"></i>
+                      {{ strategy.strategy_data.risk_level }}
                     </span>
-                    <span v-if="strategy.recommended" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                    <span v-if="strategy.strategy_data.recommended" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
                       <i class="fas fa-star mr-1 text-xs"></i>
                       Recommended
                     </span>
                   </div>
                   <div class="flex items-center gap-2">
                     <button 
-                      @click="deleteStrategy(strategy.id)"
+                      @click="deleteStrategy(strategy.strategy_data.id)"
                       class="text-gray-400 hover:text-red-500 p-1"
                       title="Delete strategy"
                     >
@@ -149,15 +149,15 @@
                     </button>
                   </div>
                 </div>
-                <h3 class="font-bold text-gray-900 text-lg">{{ strategy.name }}</h3>
+                <h3 class="font-bold text-gray-900 text-lg">{{ strategy.strategy_data.name }}</h3>
                 <p class="text-gray-600 text-xs mt-1">
-                  {{ formatStrategyType(strategy.id) }}
+                  {{ formatStrategyType(strategy.strategy_data.id) }}
                 </p>
               </div>
 
               <!-- Strategy Content -->
               <div class="p-4">
-                <p class="text-gray-700 text-sm mb-4">{{ strategy.description }}</p>
+                <p class="text-gray-700 text-sm mb-4">{{ strategy.strategy_data.description }}</p>
                 
                 <!-- Asset Allocation Preview -->
                 <div class="mb-4">
@@ -173,7 +173,7 @@
                       <div class="w-full bg-gray-200 rounded-full h-1.5">
                         <div :class="[
                           'h-1.5 rounded-full',
-                          getRiskLevelClass(strategy.risk_level).barColor
+                          getRiskLevelClass(strategy.strategy_data.risk_level).barColor
                         ]" :style="{ width: asset.percentage + '%' }"></div>
                       </div>
                     </div>
@@ -183,7 +183,7 @@
                 <!-- Suitable For -->
                 <div class="mb-4 p-3 bg-gray-50 rounded-lg">
                   <p class="text-xs font-medium text-gray-900 mb-2">Who this is for:</p>
-                  <p class="text-xs text-gray-600">{{ strategy.suitable_for }}</p>
+                  <p class="text-xs text-gray-600">{{ strategy.strategy_data.suitable_for }}</p>
                 </div>
               </div>
 
@@ -201,7 +201,7 @@
                     @click="applyStrategy(strategy)"
                     :class="[
                       'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-                      getRiskLevelClass(strategy.risk_level).button
+                      getRiskLevelClass(strategy.strategy_data.risk_level).button
                     ]"
                   >
                     Apply
@@ -218,8 +218,8 @@
             <!-- Modal Header -->
             <div class="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div>
-                <h2 class="text-xl font-bold text-gray-900">{{ selectedStrategy.name }}</h2>
-                <p class="text-gray-600 text-sm">{{ formatStrategyType(selectedStrategy.id) }} • {{ selectedStrategy.risk_level }} Risk</p>
+                <h2 class="text-xl font-bold text-gray-900">{{ selectedStrategy.strategy_data.name }}</h2>
+                <p class="text-gray-600 text-sm">{{ formatStrategyType(selectedStrategy.strategy_data.id) }} • {{ selectedStrategy.strategy_data.risk_level }} Risk</p>
               </div>
               <button @click="selectedStrategy = null" class="text-gray-400 hover:text-gray-600 p-2">
                 <i class="fas fa-times text-xl"></i>
@@ -234,7 +234,7 @@
                   <!-- Description -->
                   <div class="bg-white p-4 rounded-xl border border-gray-200">
                     <h3 class="font-bold text-gray-900 mb-3">Strategy Description</h3>
-                    <p class="text-gray-700">{{ selectedStrategy.description }}</p>
+                    <p class="text-gray-700">{{ selectedStrategy.strategy_data.description }}</p>
                   </div>
 
                   <!-- Asset Allocation Details -->
@@ -271,16 +271,16 @@
                     <div class="space-y-3">
                       <div>
                         <p class="text-xs text-gray-500">Strategy Type</p>
-                        <p class="font-medium text-gray-900">{{ formatStrategyType(selectedStrategy.id) }}</p>
+                        <p class="font-medium text-gray-900">{{ formatStrategyType(selectedStrategy.strategy_data.id) }}</p>
                       </div>
                       <div>
                         <p class="text-xs text-gray-500">Risk Level</p>
-                        <p class="font-medium text-gray-900">{{ selectedStrategy.risk_level }}</p>
+                        <p class="font-medium text-gray-900">{{ selectedStrategy.strategy_data.risk_level }}</p>
                       </div>
                       <div>
                         <p class="text-xs text-gray-500">AI Recommended</p>
-                        <p class="font-medium" :class="selectedStrategy.recommended ? 'text-green-600' : 'text-gray-900'">
-                          {{ selectedStrategy.recommended ? 'Yes' : 'No' }}
+                        <p class="font-medium" :class="selectedStrategy.strategy_data.recommended ? 'text-green-600' : 'text-gray-900'">
+                          {{ selectedStrategy.strategy_data.recommended ? 'Yes' : 'No' }}
                         </p>
                       </div>
                     </div>
@@ -289,7 +289,7 @@
                   <!-- Suitable For -->
                   <div class="bg-white p-4 rounded-xl border border-gray-200">
                     <h3 class="font-bold text-gray-900 mb-4">Who This Is For</h3>
-                    <p class="text-gray-700 text-sm">{{ selectedStrategy.suitable_for }}</p>
+                    <p class="text-gray-700 text-sm">{{ selectedStrategy.strategy_data.suitable_for }}</p>
                   </div>
 
                   <!-- Action Buttons -->
@@ -298,14 +298,14 @@
                       @click="applyStrategy(selectedStrategy)"
                       :class="[
                         'w-full py-3 rounded-lg text-white font-medium transition-colors',
-                        getRiskLevelClass(selectedStrategy.risk_level).button
+                        getRiskLevelClass(selectedStrategy.strategy_data.risk_level).button
                       ]"
                     >
                       <i class="fas fa-check-circle mr-2"></i>
                       Apply This Strategy
                     </button>
                     <button 
-                      @click="deleteStrategy(selectedStrategy.id)"
+                      @click="deleteStrategy(selectedStrategy.strategy_data.id)"
                       class="w-full py-3 rounded-lg border border-red-300 text-red-600 font-medium hover:bg-red-50 transition-colors"
                     >
                       <i class="fas fa-trash mr-2"></i>
