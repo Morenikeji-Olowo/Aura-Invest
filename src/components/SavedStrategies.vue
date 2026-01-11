@@ -41,6 +41,29 @@
           </div>
         </header>
 
+        <!-- Stats Summary -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <p class="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Total Saved</p>
+            <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{ savedStrategies.length }}</p>
+            <p class="text-gray-400 text-xs mt-1">Investment Strategies</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <p class="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Recommended</p>
+            <p class="text-2xl sm:text-3xl font-bold text-green-600">
+              {{ recommendedCount }}
+            </p>
+            <p class="text-green-500 text-sm mt-1">AI Recommended</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <p class="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Most Recent</p>
+            <p class="text-2xl sm:text-3xl font-bold text-[#800000]">
+              {{ latestDate }}
+            </p>
+            <p class="text-gray-400 text-xs mt-1">Last Strategy Saved</p>
+          </div>
+        </div>
+
         <!-- Loading State -->
         <div v-if="loading" class="space-y-6">
           <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
@@ -90,25 +113,10 @@
 
         <!-- Saved Strategies Grid -->
         <div v-else class="space-y-6">
-          <!-- Filters -->
-          <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-            <div class="flex items-center gap-3">
-              <button 
-                @click="activeFilter = 'all'"
-                :class="[
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-                  activeFilter === 'all' ? 'bg-[#800000] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                ]"
-              >
-                All ({{ savedStrategies.length }})
-              </button>
-                          </div>
-
-
           <!-- Strategies Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div 
-              v-for="strategy in filteredStrategies" 
+              v-for="strategy in savedStrategies" 
               :key="strategy.id"
               class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
             >
@@ -151,6 +159,7 @@
               <div class="p-4">
                 <p class="text-gray-700 text-sm mb-4">{{ strategy.description }}</p>
                 
+                <!-- Asset Allocation Preview -->
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-900 mb-2">Asset Allocation</p>
                   <div class="space-y-2">
@@ -177,19 +186,19 @@
                   <div class="grid grid-cols-2 gap-2">
                     <div class="text-xs">
                       <span class="text-gray-500">Amount:</span>
-                      <span class="font-medium text-gray-900 ml-1">${{ strategy.form_data.amount?.toLocaleString() || 'N/A' }}</span>
+                      <span class="font-medium text-gray-900 ml-1">${{ formatAmount(strategy.form_data) }}</span>
                     </div>
                     <div class="text-xs">
                       <span class="text-gray-500">Goal:</span>
-                      <span class="font-medium text-gray-900 ml-1">{{ formatGoal(strategy.form_data.goal) }}</span>
+                      <span class="font-medium text-gray-900 ml-1">{{ formatGoal(strategy.form_data) }}</span>
                     </div>
                     <div class="text-xs">
                       <span class="text-gray-500">Risk:</span>
-                      <span class="font-medium text-gray-900 ml-1">{{ strategy.form_data.riskTolerance || 'N/A' }}/10</span>
+                      <span class="font-medium text-gray-900 ml-1">{{ formatRisk(strategy.form_data) }}/10</span>
                     </div>
                     <div class="text-xs">
                       <span class="text-gray-500">Experience:</span>
-                      <span class="font-medium text-gray-900 ml-1 capitalize">{{ strategy.form_data.experience || 'N/A' }}</span>
+                      <span class="font-medium text-gray-900 ml-1">{{ formatExperience(strategy.form_data) }}</span>
                     </div>
                   </div>
                 </div>
@@ -205,12 +214,19 @@
                     <i class="fas fa-eye"></i>
                     View Details
                   </button>
-
+                  <button 
+                    @click="applyStrategy(strategy)"
+                    :class="[
+                      'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                      getRiskLevelClass(strategy.risk_level).button
+                    ]"
+                  >
+                    Apply
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
 
         <!-- Strategy Details Modal -->
@@ -242,7 +258,7 @@
                   <div class="bg-white p-4 rounded-xl border border-gray-200">
                     <h3 class="font-bold text-gray-900 mb-4">Detailed Asset Allocation</h3>
                     <div class="space-y-4">
-                      <div v-for="(asset, index) in JSON.parse(selectedStrategy.asset_allocation)" 
+                      <div v-for="(asset, index) in getAssetAllocation(selectedStrategy)" 
                            :key="index"
                            class="space-y-2">
                         <div class="flex justify-between items-center">
@@ -293,19 +309,19 @@
                     <div class="space-y-2">
                       <div class="flex justify-between">
                         <span class="text-xs text-gray-600">Investment Amount:</span>
-                        <span class="text-xs font-medium text-gray-900">${{ JSON.parse(selectedStrategy.form_data).amount?.toLocaleString() }}</span>
+                        <span class="text-xs font-medium text-gray-900">${{ formatAmount(selectedStrategy.form_data) }}</span>
                       </div>
                       <div class="flex justify-between">
                         <span class="text-xs text-gray-600">Investment Goal:</span>
-                        <span class="text-xs font-medium text-gray-900">{{ formatGoal(JSON.parse(selectedStrategy.form_data).goal) }}</span>
+                        <span class="text-xs font-medium text-gray-900">{{ formatGoal(selectedStrategy.form_data) }}</span>
                       </div>
                       <div class="flex justify-between">
                         <span class="text-xs text-gray-600">Risk Tolerance:</span>
-                        <span class="text-xs font-medium text-gray-900">{{ JSON.parse(selectedStrategy.form_data).riskTolerance }}/10</span>
+                        <span class="text-xs font-medium text-gray-900">{{ formatRisk(selectedStrategy.form_data) }}/10</span>
                       </div>
                       <div class="flex justify-between">
                         <span class="text-xs text-gray-600">Time Horizon:</span>
-                        <span class="text-xs font-medium text-gray-900">{{ formatTimeHorizon(JSON.parse(selectedStrategy.form_data).timeHorizon) }}</span>
+                        <span class="text-xs font-medium text-gray-900">{{ formatTimeHorizon(selectedStrategy.form_data) }}</span>
                       </div>
                     </div>
                   </div>
@@ -340,7 +356,6 @@
               </div>
             </div>
           </div>
-          </div>
         </div>
       </div>
     </main>
@@ -373,27 +388,7 @@ const navItems = ref([
   { name: 'Analytics', icon: 'fas fa-chart-bar', route: '/analytics' }
 ])
 
-const logout = async () => {  
-  isSaving.value = true
-  try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/auth/logout.php`, {
-      method: 'POST',
-      credentials: 'include',
-    })
-
-    if (response.ok) {
-      console.log('Logout successful')
-      localStorage.clear()
-      window.location.reload()
-    } else {
-      console.error('Logout failed')
-    }
-  } catch (error) {
-    console.error('Error during logout:', error)
-  } finally {
-    isSaving.value = false
-  }
-}
+// Computed properties
 const recommendedCount = computed(() => {
   return savedStrategies.value.filter(s => s.is_recommended).length
 })
@@ -406,8 +401,9 @@ const latestDate = computed(() => {
   return formatDateShort(latest.created_at)
 })
 
+// Helper functions
 const getRiskLevelClass = (riskLevel) => {
-  const level = riskLevel.toLowerCase()
+  const level = riskLevel?.toLowerCase() || ''
   if (level.includes('low') || level.includes('conservative')) {
     return {
       badge: 'bg-green-100 text-green-800',
@@ -447,8 +443,28 @@ const getRiskLevelClass = (riskLevel) => {
 }
 
 const getAssetAllocationPreview = (allocation) => {
-  const assets = JSON.parse(allocation || '[]')
-  return assets.slice(0, 3) // Show first 3 assets
+  try {
+    if (typeof allocation === 'string') {
+      const assets = JSON.parse(allocation || '[]')
+      return assets.slice(0, 3)
+    }
+    return []
+  } catch (error) {
+    console.error('Error parsing asset allocation:', error)
+    return []
+  }
+}
+
+const getAssetAllocation = (strategy) => {
+  try {
+    if (strategy.asset_allocation) {
+      return JSON.parse(strategy.asset_allocation)
+    }
+    return []
+  } catch (error) {
+    console.error('Error parsing asset allocation:', error)
+    return []
+  }
 }
 
 const getAssetDescription = (asset) => {
@@ -464,42 +480,87 @@ const getAssetDescription = (asset) => {
 }
 
 const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  })
+  try {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })
+  } catch (error) {
+    return 'Unknown date'
+  }
 }
 
 const formatDateShort = (dateString) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { 
-    month: 'short', 
-    day: 'numeric',
-    year: 'numeric'
-  })
+  try {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    })
+  } catch (error) {
+    return 'Unknown'
+  }
 }
 
-const formatGoal = (goal) => {
-  const goals = {
-    'retirement': 'Retirement',
-    'growth': 'Wealth Growth',
-    'education': 'Education',
-    'home': 'Home Purchase',
-    'emergency': 'Emergency Fund',
-    'other': 'Other'
+const formatAmount = (formData) => {
+  try {
+    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
+    return data?.amount?.toLocaleString() || 'N/A'
+  } catch (error) {
+    return 'N/A'
   }
-  return goals[goal] || goal || 'N/A'
 }
 
-const formatTimeHorizon = (horizon) => {
-  const horizons = {
-    'short': 'Short-term (< 3 years)',
-    'medium': 'Medium-term (3-7 years)',
-    'long': 'Long-term (> 7 years)'
+const formatGoal = (formData) => {
+  try {
+    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
+    const goals = {
+      'retirement': 'Retirement',
+      'growth': 'Wealth Growth',
+      'education': 'Education',
+      'home': 'Home Purchase',
+      'emergency': 'Emergency Fund',
+      'other': 'Other'
+    }
+    return goals[data?.goal] || data?.goal || 'N/A'
+  } catch (error) {
+    return 'N/A'
   }
-  return horizons[horizon] || horizon || 'N/A'
+}
+
+const formatRisk = (formData) => {
+  try {
+    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
+    return data?.riskTolerance || 'N/A'
+  } catch (error) {
+    return 'N/A'
+  }
+}
+
+const formatExperience = (formData) => {
+  try {
+    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
+    return data?.experience ? data.experience.charAt(0).toUpperCase() + data.experience.slice(1) : 'N/A'
+  } catch (error) {
+    return 'N/A'
+  }
+}
+
+const formatTimeHorizon = (formData) => {
+  try {
+    const data = typeof formData === 'string' ? JSON.parse(formData) : formData
+    const horizons = {
+      'short': 'Short-term (< 3 years)',
+      'medium': 'Medium-term (3-7 years)',
+      'long': 'Long-term (> 7 years)'
+    }
+    return horizons[data?.timeHorizon] || data?.timeHorizon || 'N/A'
+  } catch (error) {
+    return 'N/A'
+  }
 }
 
 // Methods
@@ -508,9 +569,32 @@ const handleNavClick = (item) => {
     router.push(item.route)
   }
 }
+
 const handleSettingsClick = () => {
   router.push('/settings')
 }
+
+const logout = async () => {  
+  isSaving.value = true
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/auth/logout.php`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+
+    if (response.ok) {
+      localStorage.clear()
+      window.location.reload()
+    } else {
+      console.error('Logout failed')
+    }
+  } catch (error) {
+    console.error('Error during logout:', error)
+  } finally {
+    isSaving.value = false
+  }
+}
+
 const fetchSavedStrategies = async () => {
   loading.value = true
   try {
@@ -548,7 +632,6 @@ const viewStrategyDetails = (strategy) => {
 }
 
 const applyStrategy = async (strategy) => {
-  // Show confirmation
   if (confirm(`Apply "${strategy.strategy_name}" strategy to your portfolio?`)) {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/code/strategies/apply.php`, {
@@ -566,7 +649,6 @@ const applyStrategy = async (strategy) => {
       
       if (data.success) {
         alert('Strategy applied successfully!')
-        // Optional: Navigate to portfolio or refresh
       } else {
         alert(data.message || 'Failed to apply strategy')
       }
@@ -613,18 +695,6 @@ const deleteStrategy = async (strategyId) => {
   } catch (error) {
     console.error('Error deleting strategy:', error)
     alert('Failed to delete strategy. Please try again.')
-  }
-}
-
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-  }
-}
-
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++
   }
 }
 
