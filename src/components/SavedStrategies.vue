@@ -393,7 +393,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import SideBar from './SideBar.vue'
 import { getUserProfile } from '../utils/getUserDetails'
-import { useAuth } from '../utils/auth'
 
 const router = useRouter()
 const Udetails = ref(null)
@@ -589,13 +588,6 @@ const handleNavClick = (item) => {
 
 const handleSettingsClick = () => {
   router.push('/settings')
-}
-
-const logout = async () => {
-  const result = await authLogout()
-  if (result.success) {
-    router.push('/login')
-  }
 }
 
 const fetchSavedStrategies = async () => {
