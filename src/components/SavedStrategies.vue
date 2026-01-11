@@ -205,53 +205,12 @@
                     <i class="fas fa-eye"></i>
                     View Details
                   </button>
-                  <button 
-                    @click="applyStrategy(strategy)"
-                    :class="[
-                      'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-                      getRiskLevelClass(strategy.risk_level).button
-                    ]"
-                  >
-                    Apply Strategy
-                  </button>
+
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Pagination -->
-          <div v-if="filteredStrategies.length > 0" class="flex items-center justify-between bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-            <div class="text-sm text-gray-600">
-              Showing {{ Math.min((currentPage - 1) * itemsPerPage + 1, filteredStrategies.length) }}-{{ Math.min(currentPage * itemsPerPage, filteredStrategies.length) }} of {{ filteredStrategies.length }} strategies
-            </div>
-            <div class="flex gap-2">
-              <button 
-                @click="prevPage"
-                :disabled="currentPage === 1"
-                class="px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <i class="fas fa-chevron-left"></i>
-              </button>
-              <button 
-                v-for="page in totalPages"
-                :key="page"
-                @click="currentPage = page"
-                :class="[
-                  'px-3 py-2 rounded-lg text-sm font-medium',
-                  currentPage === page ? 'bg-[#800000] text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                ]"
-              >
-                {{ page }}
-              </button>
-              <button 
-                @click="nextPage"
-                :disabled="currentPage === totalPages"
-                class="px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <i class="fas fa-chevron-right"></i>
-              </button>
-            </div>
-          </div>
         </div>
 
         <!-- Strategy Details Modal -->
@@ -402,10 +361,6 @@ const isSaving = ref(false)
 // Data
 const savedStrategies = ref([])
 const loading = ref(true)
-const searchQuery = ref('')
-const activeFilter = ref('all')
-const currentPage = ref(1)
-const itemsPerPage = 6
 const selectedStrategy = ref(null)
 
 // Navigation items
