@@ -10,7 +10,7 @@ header("Access-Control-Allow-Credentials: true");
 
 
 $data = json_decode(file_get_contents("php://input"), true);
-$userId = $data["userId"] ?? null;
+$userId = $data["user_id"] ?? null;
 $strategy_id = $data["strategy_id"] ?? null;
 
 try {

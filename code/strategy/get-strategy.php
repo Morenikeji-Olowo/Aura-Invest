@@ -10,7 +10,7 @@ header("Access-Control-Allow-Credentials: true");
 
 
 $data = json_decode(file_get_contents("php://input"), true);
-$userId = $data["userId"] ?? null;
+$userId = $data["user_id"] ?? null;
 try {
     $stmt = $conn->prepare("SELECT strategy_id, strategy_data FROM user_strategies WHERE user_id = ?");
     $stmt->bind_param("i", $userId);
