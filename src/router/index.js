@@ -13,9 +13,11 @@ import Step6 from "../views/onboarding/Step6AI-Result.vue";
 import test from "../components/test.vue";
 import Signin from "../components/Signin.vue";
 import LandingPage from "../views/LandingPage/LandingPage.vue";
+import RecommendationPage from "../components/RecommendationPage.vue";
 
 const routes = [
   { path: "/register", component: AuthPage },
+  {path: "/recommend", component: RecommendationPage },
   { path: "/login", component: Signin },
   {
     path: "/dashboard",
