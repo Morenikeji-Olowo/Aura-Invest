@@ -2,7 +2,7 @@
 <template>
   <div class="min-h-screen bg-[#f8f9fa] font-['Inter'] lg:flex">
     <!-- Reusable Sidebar Component -->
-    <Sidebar
+    <SideBar
       :nav-items="navItems"
       :mobile-menu-open="mobileMenuOpen"
       :is-saving="isSaving"
@@ -174,8 +174,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Sidebar from '@/components/Sidebar.vue'
+import SideBar from './SideBar.vue'
 import { getUserProfile } from '../utils/getUserDetails'
+import SideBar from './SideBar.vue'
 
 const router = useRouter()
 const Udetails = ref(null)
