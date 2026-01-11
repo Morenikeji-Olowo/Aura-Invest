@@ -660,27 +660,24 @@ const resetForm = () => {
   showResults.value = false
   aiResponse.value = null
 }
-
 const getRecommendations = async () => {
   loading.value = true
-  
+
   try {
     const response = await fetch(`${import.meta.env.VITE_AI_RECOMMEND_API}/api/recommend`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form.value)
     })
-    
+
     const data = await response.json()
-    
-    if (data.success || data.investment_options) {
-      // Store the AI response
-      aiResponse.value = data
+    console.log("AI response:", data) // <-- always log
+
+    if (data.success && data.recommendation) {
+      // Correctly store only the recommendation object
+      aiResponse.value = data.recommendation
       showResults.value = true
-      
-      // Scroll to results on mobile
+
       if (window.innerWidth < 1024) {
         const resultsSection = document.querySelector('.lg\\:col-span-7, .lg\\:col-span-12')
         if (resultsSection) {
@@ -688,10 +685,9 @@ const getRecommendations = async () => {
         }
       }
     } else {
-      // Handle errors
       alert(data.message || 'Failed to get recommendations. Please try again.')
     }
-    
+
   } catch (error) {
     console.error('Error fetching recommendations:', error)
     alert('Failed to get AI recommendations. Please try again.')
@@ -699,6 +695,7 @@ const getRecommendations = async () => {
     loading.value = false
   }
 }
+
 
 // Animation methods
 const enterAnimation = (el, done) => {
