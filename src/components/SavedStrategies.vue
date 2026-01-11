@@ -585,11 +585,9 @@ const handleNavClick = (item) => {
     router.push(item.route)
   }
 }
-
 const handleSettingsClick = () => {
   router.push('/settings')
 }
-
 const fetchSavedStrategies = async () => {
   loading.value = true
   try {
@@ -600,7 +598,8 @@ const fetchSavedStrategies = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ user_id: userData.id })
+      body: JSON.stringify({ user_id: userData.id }),
+      credentials: 'include',
     })
     
     const data = await response.json()
@@ -669,7 +668,8 @@ const deleteStrategy = async (strategyId) => {
       body: JSON.stringify({
         strategy_id: strategyId,
         user_id: Udetails.value?.id
-      })
+      }),
+      credentials: 'include',
     })
     
     const data = await response.json()

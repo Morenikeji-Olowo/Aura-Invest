@@ -18,6 +18,12 @@
           >
             Reset
           </button>
+        <button
+          @click="$router.push('/dashboard')"
+          class="text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 hover:border-[#800000] hover:text-[#800000] transition-colors"
+        >
+          <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+        </button>
         </div>
       </div>
     </div>
