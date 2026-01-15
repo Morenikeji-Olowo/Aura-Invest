@@ -128,7 +128,7 @@
                               :key="age"
                               @click="form.age = age"
                               :class="[
-                                'py-3 px-4 rounded-lg border transition-all text-sm font-medium',
+                                'py-3 px-4 rounded-lg border transition-all text-sm font-medium bg-white',
                                 form.age === age
                                   ? 'border-[#800000] bg-[#800000]/5 text-[#800000]'
                                   : 'border-gray-300 text-gray-700 hover:border-gray-400',
@@ -147,7 +147,7 @@
                           >
                           <select
                             v-model="form.country"
-                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#800000] focus:border-[#800000] transition-all text-sm"
+                            class="bg-white w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#800000] focus:border-[#800000] transition-all text-sm"
                           >
                             <option value="">Select your country</option>
                             <option
@@ -172,7 +172,7 @@
                               :key="income.value"
                               @click="form.income = income.value"
                               :class="[
-                                'py-3 px-4 rounded-lg border transition-all text-sm font-medium truncate',
+                                'bg-white py-3 px-4 rounded-lg border transition-all text-sm font-medium truncate',
                                 form.income === income.value
                                   ? 'border-[#800000] bg-[#800000]/5 text-[#800000]'
                                   : 'border-gray-300 text-gray-700 hover:border-gray-400',
@@ -239,7 +239,7 @@
                               :key="goal.value"
                               @click="form.goal = goal.value"
                               :class="[
-                                'py-3 px-4 rounded-lg border transition-all text-sm font-medium flex flex-col items-center text-center',
+                                'bg-white py-3 px-4 rounded-lg border transition-all text-sm font-medium flex flex-col items-center text-center',
                                 form.goal === goal.value
                                   ? 'border-[#800000] bg-[#800000]/5 text-[#800000]'
                                   : 'border-gray-300 text-gray-700 hover:border-gray-400',
@@ -307,7 +307,7 @@
                               :key="horizon.value"
                               @click="form.timeHorizon = horizon.value"
                               :class="[
-                                'py-3 px-4 rounded-lg border transition-all text-sm font-medium',
+                                'bg-white py-3 px-4 rounded-lg border transition-all text-sm font-medium',
                                 form.timeHorizon === horizon.value
                                   ? 'border-[#800000] bg-[#800000]/5 text-[#800000]'
                                   : 'border-gray-300 text-gray-700 hover:border-gray-400',
@@ -330,7 +330,7 @@
                               :key="exp.value"
                               @click="form.experience = exp.value"
                               :class="[
-                                'py-3 px-4 rounded-lg border transition-all text-sm font-medium',
+                                'bg-white py-3 px-4 rounded-lg border transition-all text-sm font-medium',
                                 form.experience === exp.value
                                   ? 'border-[#800000] bg-[#800000]/5 text-[#800000]'
                                   : 'border-gray-300 text-gray-700 hover:border-gray-400',
