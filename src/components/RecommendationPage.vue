@@ -147,7 +147,7 @@
                           >
                           <select
                             v-model="form.country"
-                            class="bg-white w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#800000] focus:border-[#800000] transition-all text-sm"
+                            class="bg-white w-full px-4 py-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#800000] focus:border-[#800000] transition-all text-sm"
                           >
                             <option value="">Select your country</option>
                             <option
