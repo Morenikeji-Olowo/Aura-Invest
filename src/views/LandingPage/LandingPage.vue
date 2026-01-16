@@ -597,7 +597,7 @@
           v-model="userInput"
           @keyup.enter="sendMessage"
           placeholder="Type your message..."
-          class="bg-white flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#800000]"
+          class="bg-white text-black flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#800000]"
         />
         <button
           @click="sendMessage"
